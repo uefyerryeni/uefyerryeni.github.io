@@ -30,6 +30,8 @@
       font-family: 'Archivo Narrow', sans-serif;
       background:#fffdf0;
       color:#000;
+      overflow-x:hidden;
+      -webkit-text-size-adjust:100%;
     }
     h1,h2,h3 { text-wrap: balance; }
     .neo {
@@ -58,6 +60,40 @@
       font-size:clamp(2.4rem,6vw,4.8rem);
       line-height:.92;
     }
+    a, button, summary { touch-action: manipulation; }
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline:3px solid #000;
+      outline-offset:3px;
+    }
+    .tap-target { min-height:44px; }
+    .mobile-menu summary { list-style:none; }
+    .mobile-menu summary::-webkit-details-marker { display:none; }
+
+    @media (max-width: 640px) {
+      .hero-title {
+        font-size:clamp(3.25rem,17vw,4.9rem);
+        line-height:.88;
+        overflow-wrap:anywhere;
+      }
+      .section-title {
+        font-size:clamp(2.15rem,11vw,3.3rem);
+        line-height:.94;
+      }
+      .mobile-card {
+        padding:1.25rem !important;
+      }
+      .mobile-section {
+        padding-left:1rem !important;
+        padding-right:1rem !important;
+      }
+      .mobile-stack-btn {
+        width:100%;
+        justify-content:center;
+        text-align:center;
+      }
+      .neo, .neo-btn { box-shadow:3px 3px 0 #000; }
+      .neo-lg { box-shadow:4px 4px 0 #000; }
+    }
   </style>
 </head>
 <body class="bg-[#fffdf0] text-black antialiased selection:bg-[#f4dd19] selection:text-black">
@@ -76,14 +112,22 @@
         <a href="./rede/" class="bg-black text-[#f4dd19] px-3 py-1 neo hover:bg-white hover:text-black transition-colors">Rede UFRN</a>
       </nav>
 
-      <a href="#projetos" class="md:hidden bg-black text-[#f4dd19] px-3 py-2 font-black uppercase neo">Projetos</a>
+      <details class="mobile-menu md:hidden relative">
+        <summary class="tap-target bg-black text-[#f4dd19] px-4 py-2 font-black uppercase neo cursor-pointer flex items-center">Menu</summary>
+        <div class="absolute right-0 mt-3 w-64 max-w-[calc(100vw-2rem)] bg-white p-3 neo z-50 space-y-2">
+          <a href="#sobre" class="tap-target flex items-center border-2 border-black px-3 py-2 font-black uppercase">Sobre</a>
+          <a href="#quem-e" class="tap-target flex items-center border-2 border-black px-3 py-2 font-black uppercase">Quem é?</a>
+          <a href="#projetos" class="tap-target flex items-center border-2 border-black px-3 py-2 font-black uppercase">Projetos</a>
+          <a href="./rede/" class="tap-target flex items-center bg-black text-[#f4dd19] border-2 border-black px-3 py-2 font-black uppercase">Rede UFRN →</a>
+        </div>
+      </details>
     </div>
   </header>
 
-  <section class="bg-[#f4dd19] border-b-4 border-black px-4 py-14 md:py-20">
+  <section class="mobile-section bg-[#f4dd19] border-b-4 border-black px-4 py-10 sm:py-14 md:py-20">
     <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[180px_1fr] gap-8 items-center">
       <div class="flex justify-center md:justify-start">
-        <img src="./uefyerryeni-logo.png" alt="Marca Uefyerryeni" class="w-36 md:w-44 aspect-square object-contain rounded-full neo-lg bg-[#f4dd19]">
+        <img src="./uefyerryeni-logo.png" alt="Marca Uefyerryeni" class="w-28 sm:w-36 md:w-44 aspect-square object-contain rounded-full neo-lg bg-[#f4dd19]">
       </div>
 
       <div>
@@ -95,29 +139,29 @@
           Um espaço para reunir propostas, observação crítica e iniciativas voltadas à comunicação e à vida universitária.
         </p>
         <div class="flex flex-wrap gap-3 mt-6">
-          <a href="https://x.com/Uefyerryeni" target="_blank" rel="noopener noreferrer" class="neo-btn bg-black text-[#f4dd19] px-5 py-3 font-black uppercase no-underline">X / @Uefyerryeni ↗</a>
-          <a href="https://www.instagram.com/uefyerryeni/" target="_blank" rel="noopener noreferrer" class="neo-btn bg-white text-black px-5 py-3 font-black uppercase no-underline">Instagram / @Uefyerryeni ↗</a>
+          <a href="https://x.com/Uefyerryeni" target="_blank" rel="noopener noreferrer" class="mobile-stack-btn tap-target neo-btn bg-black text-[#f4dd19] px-5 py-3 font-black uppercase no-underline flex items-center">X / @Uefyerryeni ↗</a>
+          <a href="https://www.instagram.com/uefyerryeni/" target="_blank" rel="noopener noreferrer" class="mobile-stack-btn tap-target neo-btn bg-white text-black px-5 py-3 font-black uppercase no-underline flex items-center">Instagram / @Uefyerryeni ↗</a>
         </div>
       </div>
     </div>
   </section>
 
-  <main class="max-w-6xl mx-auto px-4 py-12 space-y-16">
+  <main class="max-w-6xl mx-auto px-4 py-9 sm:py-12 space-y-11 sm:space-y-16">
 
     <section id="sobre" class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-      <div class="bg-black text-white p-7 neo-lg">
+      <div class="mobile-card bg-black text-white p-7 neo-lg">
         <span class="bg-[#f4dd19] text-black font-black px-2 py-1 text-xs uppercase inline-block mb-4">01 / Sobre</span>
         <h2 class="text-4xl md:text-5xl font-black uppercase leading-none text-[#f4dd19]">Um portal de projetos</h2>
       </div>
 
-      <div class="md:col-span-2 bg-white p-8 neo-lg flex items-center">
+      <div class="mobile-card md:col-span-2 bg-white p-8 neo-lg flex items-center">
         <p class="text-xl md:text-2xl font-semibold leading-snug m-0">
           Esta página organiza em um único endereço os projetos públicos da Uefyerryeni. Cada iniciativa mantém conteúdo e identidade próprios, mas passa a fazer parte de uma mesma estrutura de navegação.
         </p>
       </div>
     </section>
 
-    <section id="quem-e" class="bg-[#f4dd19] p-8 md:p-10 neo-lg space-y-7">
+    <section id="quem-e" class="mobile-card bg-[#f4dd19] p-8 md:p-10 neo-lg space-y-7">
       <div class="flex flex-wrap items-end justify-between gap-4 border-b-4 border-black pb-4">
         <div>
           <span class="bg-black text-[#f4dd19] font-black px-2 py-1 text-xs uppercase">02 / Quem é?</span>
@@ -127,7 +171,7 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="md:col-span-2 bg-white p-7 neo">
+        <div class="mobile-card md:col-span-2 bg-white p-7 neo">
           <p class="text-2xl md:text-3xl font-bold leading-tight mb-5">
             Se a UFRN fosse uma cidade, eu seria aquela pessoa que sabe onde está o aviso importante, onde apareceu uma pauta boa, quem está vendendo docinho no corredor e por que o Circular voltou a ser assunto.
           </p>
@@ -136,7 +180,7 @@
           </p>
         </div>
 
-        <aside class="bg-black text-white p-7 neo flex flex-col justify-between">
+        <aside class="mobile-card bg-black text-white p-7 neo flex flex-col justify-between">
           <div>
             <span class="inline-block bg-[#f4dd19] text-black px-3 py-1 font-black uppercase text-xs mb-5">Ficha não tão técnica</span>
             <p class="text-xl font-bold leading-snug mb-4"><span class="text-[#f4dd19]">Nome:</span> Uefyerryeni.</p>
@@ -147,7 +191,7 @@
         </aside>
       </div>
 
-      <div class="bg-[#fffdf0] p-6 neo">
+      <div class="mobile-card bg-[#fffdf0] p-6 neo">
         <p class="text-lg md:text-xl font-bold leading-snug m-0">
           Em resumo: sou uma página anônima, independente e curiosa demais para fingir que não vi. Quando dá para informar, eu informo. Quando dá para explicar, eu explico. E quando a realidade universitária entrega a piada pronta, eu só faço o trabalho de legenda.
         </p>
@@ -164,7 +208,7 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <article class="bg-[#f4dd19] p-8 neo-lg min-h-[390px] flex flex-col justify-between">
+        <article class="mobile-card bg-[#f4dd19] p-8 neo-lg md:min-h-[390px] flex flex-col justify-between">
           <div>
             <span class="inline-block bg-black text-[#f4dd19] px-3 py-1 font-black uppercase text-xs neo mb-5">Disponível agora</span>
             <h3 class="text-4xl md:text-5xl font-black uppercase leading-none mb-5">Rede UFRN de Comunicação Científica e Social</h3>
@@ -172,12 +216,12 @@
               Proposta de política permanente de comunicação em rede, conectando laboratórios, pesquisa, extensão, comunicação institucional e sociedade.
             </p>
           </div>
-          <a href="./rede/" class="neo-btn bg-black text-[#f4dd19] px-6 py-4 font-black uppercase text-lg inline-flex items-center justify-between gap-6 no-underline mt-8">
+          <a href="./rede/" class="mobile-stack-btn tap-target neo-btn bg-black text-[#f4dd19] px-6 py-4 font-black uppercase text-lg inline-flex items-center justify-between gap-6 no-underline mt-8">
             Acessar projeto <span aria-hidden="true">→</span>
           </a>
         </article>
 
-        <article class="bg-white p-8 neo-lg min-h-[390px] flex flex-col justify-between">
+        <article class="mobile-card bg-white p-8 neo-lg md:min-h-[390px] flex flex-col justify-between">
           <div>
             <span class="inline-block bg-black text-white px-3 py-1 font-black uppercase text-xs neo mb-5">Em migração</span>
             <h3 class="text-4xl md:text-5xl font-black uppercase leading-none mb-5">Observatório UEFY</h3>
@@ -192,7 +236,7 @@
       </div>
     </section>
 
-    <section class="bg-black text-white p-8 md:p-10 neo-lg">
+    <section class="mobile-card bg-black text-white p-8 md:p-10 neo-lg">
       <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 items-center">
         <div>
           <span class="bg-[#f4dd19] text-black px-3 py-1 font-black uppercase text-xs inline-block mb-4">Estrutura do portal</span>
@@ -201,7 +245,7 @@
             A home funciona como ponto de entrada. Cada projeto terá sua própria página e sempre poderá retornar a este portal.
           </p>
         </div>
-        <a href="./rede/" class="neo-btn bg-[#f4dd19] text-black px-6 py-4 font-black uppercase text-lg no-underline">Ver a Rede →</a>
+        <a href="./rede/" class="mobile-stack-btn tap-target neo-btn bg-[#f4dd19] text-black px-6 py-4 font-black uppercase text-lg no-underline flex items-center justify-center">Ver a Rede →</a>
       </div>
     </section>
 
@@ -220,5 +264,13 @@
     </div>
   </footer>
 
+<script>
+  document.querySelectorAll('.mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      const menu = link.closest('details');
+      if (menu) menu.removeAttribute('open');
+    });
+  });
+</script>
 </body>
 </html>
