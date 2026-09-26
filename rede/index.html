@@ -97,60 +97,151 @@
             border: 2px solid #000000;
             box-shadow: 2px 2px 0px #000000;
         }
+        .site-header {
+            backdrop-filter: saturate(120%);
+        }
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            border: 2px solid #000;
+            border-radius: 999px;
+            background: #f4dd19;
+            flex: 0 0 auto;
+        }
+        .hero-title {
+            font-size: clamp(3.4rem, 8.4vw, 7.4rem);
+            line-height: .86 !important;
+            letter-spacing: -0.035em !important;
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.5fr) minmax(260px, .6fr);
+            gap: 2rem;
+            align-items: end;
+        }
+        .hero-note {
+            font-size: clamp(1.25rem, 2.3vw, 1.8rem);
+            line-height: 1.14;
+        }
+        .hero-summary li + li {
+            border-top: 2px solid #000;
+        }
+        .mini-nav {
+            scrollbar-width: none;
+        }
+        .mini-nav::-webkit-scrollbar {
+            display: none;
+        }
+        @media (max-width: 1024px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                align-items: stretch;
+            }
+        }
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: clamp(3rem, 15vw, 5rem);
+            }
+            .mobile-menu summary {
+                list-style: none;
+            }
+            .mobile-menu summary::-webkit-details-marker {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body class="bg-[#fffdf0] text-black antialiased selection:bg-[#f4dd19] selection:text-black">
 
-    <header class="sticky top-0 z-50 bg-[#f4dd19] border-b-4 border-black px-4 py-3">
-        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
-            <div class="flex items-center space-x-2">
-                <a href="../" class="flex items-center space-x-2 no-underline" aria-label="Voltar à página inicial da Uefyerryeni">
-                    <span class="bg-black text-[#f4dd19] font-black px-3 py-1 text-xl neo-box rotate-[-2deg]">UEFYERRYENI</span>
-                </a>
-                <span class="font-bold text-lg hidden sm:inline">Rede UFRN de Comunicação</span>
-            </div>
-            <nav class="hidden md:flex items-center space-x-3 text-sm font-bold uppercase">
-                <a href="../" class="bg-[#f4dd19] px-3 py-1 neo-box hover:bg-black hover:text-[#f4dd19] transition-colors">← Início</a>
-                <a href="#apresentacao" class="bg-white px-3 py-1 neo-box hover:bg-black hover:text-white transition-colors">Apresentação</a>
-                <a href="#justificativa" class="bg-white px-3 py-1 neo-box hover:bg-black hover:text-white transition-colors">Justificativa</a>
-                <a href="#objetivos" class="bg-white px-3 py-1 neo-box hover:bg-black hover:text-white transition-colors">Objetivos</a>
-                <a href="#funcionamento" class="bg-white px-3 py-1 neo-box hover:bg-black hover:text-white transition-colors">Como Funciona</a>
-                <a href="#download" class="bg-white px-3 py-1 neo-box hover:bg-black hover:text-white transition-colors">Documento</a>
-                <a href="#perguntas" class="bg-white px-3 py-1 neo-box hover:bg-black hover:text-white transition-colors">3 Perguntas</a>
-                <a href="#chapas" class="bg-black text-[#f4dd19] px-3 py-1 neo-box hover:bg-white hover:text-black transition-colors">Para as Chapas</a>
+    <header class="site-header sticky top-0 z-50 bg-[#f4dd19] border-b-4 border-black px-4 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            <a href="../" class="flex items-center gap-3 no-underline min-w-0" aria-label="Voltar à página inicial da Uefyerryeni">
+                <img src="../uefyerryeni-logo.png" alt="Marca Uefyerryeni" class="brand-mark">
+                <div class="min-w-0">
+                    <span class="block font-black text-xl leading-none uppercase">UEFYERRYENI</span>
+                    <span class="block text-xs font-bold uppercase mt-1 truncate">Rede UFRN de Comunicação Científica e Social</span>
+                </div>
+            </a>
+
+            <nav class="hidden lg:flex items-center gap-2 text-xs font-black uppercase">
+                <a href="../" class="bg-white px-3 py-2 neo-box hover:bg-black hover:text-white transition-colors">← Portal</a>
+                <a href="#apresentacao" class="bg-white px-3 py-2 neo-box hover:bg-black hover:text-white transition-colors">Contexto</a>
+                <a href="#objetivos" class="bg-white px-3 py-2 neo-box hover:bg-black hover:text-white transition-colors">Objetivos</a>
+                <a href="#funcionamento" class="bg-white px-3 py-2 neo-box hover:bg-black hover:text-white transition-colors">Funcionamento</a>
+                <a href="#perguntas" class="bg-black text-[#f4dd19] px-3 py-2 neo-box hover:bg-white hover:text-black transition-colors">3 perguntas</a>
             </nav>
-            <div class="flex items-center">
-                <a href="#chapas" class="neo-button bg-white px-4 py-1.5 font-black text-sm uppercase">Proposta 2026</a>
-            </div>
+
+            <details class="mobile-menu lg:hidden relative">
+                <summary class="neo-button bg-black text-[#f4dd19] px-4 py-2 font-black uppercase text-sm cursor-pointer">Menu</summary>
+                <div class="absolute right-0 mt-3 w-64 bg-white p-3 neo-box space-y-2">
+                    <a href="../" class="block border-2 border-black px-3 py-2 font-black uppercase text-sm">← Portal Uefyerryeni</a>
+                    <a href="#apresentacao" class="block border-2 border-black px-3 py-2 font-black uppercase text-sm">Contexto</a>
+                    <a href="#objetivos" class="block border-2 border-black px-3 py-2 font-black uppercase text-sm">Objetivos</a>
+                    <a href="#funcionamento" class="block border-2 border-black px-3 py-2 font-black uppercase text-sm">Funcionamento</a>
+                    <a href="#download" class="block border-2 border-black px-3 py-2 font-black uppercase text-sm">Documento</a>
+                    <a href="#perguntas" class="block bg-black text-[#f4dd19] border-2 border-black px-3 py-2 font-black uppercase text-sm">3 perguntas</a>
+                </div>
+            </details>
         </div>
     </header>
 
-    <section class="relative bg-[#f4dd19] border-b-4 border-black py-12 md:py-20 px-4">
-        <div class="max-w-6xl mx-auto text-center space-y-6">
-            <div class="inline-block bg-black text-white px-4 py-1.5 font-bold text-sm uppercase neo-box rotate-[1deg]">
-                Proposta Autoral às Chapas Candidatas à Reitoria da UFRN
+    <section class="relative bg-[#f4dd19] border-b-4 border-black px-4 py-10 md:py-16">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-wrap items-center gap-2 mb-7">
+                <a href="../" class="bg-white px-3 py-1.5 font-black text-xs uppercase neo-badge no-underline">Portal Uefyerryeni</a>
+                <span class="font-black text-lg">/</span>
+                <span class="bg-black text-white px-3 py-1.5 font-black text-xs uppercase neo-badge">Proposta 2026</span>
             </div>
-            <h1 class="text-5xl sm:text-7xl md:text-8xl font-black uppercase leading-none">
-                Rede UFRN de Comunicação Científica e Social
-            </h1>
-            <p class="text-note text-2xl sm:text-3xl max-w-4xl mx-auto bg-white p-5 neo-box">
-                Por uma política de comunicação em rede, conectada aos laboratórios, à pesquisa e à sociedade.
-            </p>
-            <div class="flex flex-wrap justify-center gap-4 pt-4">
-                <a href="#apresentacao" class="neo-button bg-black text-[#f4dd19] px-8 py-4 font-black text-lg uppercase">
-                    Ler Proposta &rarr;
-                </a>
-                <a href="#objetivos" class="neo-button bg-white text-black px-8 py-4 font-black text-lg uppercase">
-                    Ver Objetivos
-                </a>
-                <a href="#download" class="neo-button bg-white text-black px-8 py-4 font-black text-lg uppercase">
-                    Baixar Documento
-                </a>
+
+            <div class="hero-grid">
+                <div>
+                    <span class="inline-block bg-black text-[#f4dd19] px-4 py-2 font-black text-sm uppercase neo-box rotate-[-1deg] mb-6">
+                        Proposta autoral às chapas candidatas à Reitoria da UFRN
+                    </span>
+
+                    <h1 class="hero-title font-black uppercase mb-7">
+                        Rede UFRN de Comunicação Científica e Social
+                    </h1>
+
+                    <p class="hero-note max-w-4xl bg-white p-5 md:p-6 neo-box font-semibold">
+                        Por uma política de comunicação em rede, conectada aos laboratórios, à pesquisa e à sociedade.
+                    </p>
+
+                    <div class="flex flex-wrap gap-3 pt-7">
+                        <a href="#apresentacao" class="neo-button bg-black text-[#f4dd19] px-6 py-3 font-black text-base uppercase">
+                            Entender a proposta →
+                        </a>
+                        <a href="#download" class="neo-button bg-white text-black px-6 py-3 font-black text-base uppercase">
+                            Baixar PDF
+                        </a>
+                    </div>
+                </div>
+
+                <aside class="bg-white p-6 neo-box-lg">
+                    <span class="inline-block bg-[#f4dd19] px-3 py-1 border-2 border-black font-black text-xs uppercase mb-4">Em resumo</span>
+                    <ul class="hero-summary font-bold text-lg leading-tight">
+                        <li class="py-3 first:pt-0">Rede permanente entre laboratórios, projetos e comunicação institucional.</li>
+                        <li class="py-3">Formação em comunicação pública da ciência.</li>
+                        <li class="py-3">Estrutura, bolsas, editais e apoio técnico.</li>
+                        <li class="py-3 last:pb-0">Três perguntas objetivas às chapas sobre implementação.</li>
+                    </ul>
+                </aside>
             </div>
+
+            <nav class="mini-nav mt-8 flex gap-2 overflow-x-auto pb-2 text-xs font-black uppercase" aria-label="Atalhos da proposta">
+                <a href="#apresentacao" class="whitespace-nowrap bg-white px-3 py-2 border-2 border-black">Apresentação</a>
+                <a href="#justificativa" class="whitespace-nowrap bg-white px-3 py-2 border-2 border-black">Justificativa</a>
+                <a href="#objetivos" class="whitespace-nowrap bg-white px-3 py-2 border-2 border-black">Objetivos</a>
+                <a href="#funcionamento" class="whitespace-nowrap bg-white px-3 py-2 border-2 border-black">Como funciona</a>
+                <a href="#download" class="whitespace-nowrap bg-white px-3 py-2 border-2 border-black">Documento</a>
+                <a href="#chapas" class="whitespace-nowrap bg-white px-3 py-2 border-2 border-black">Compromissos</a>
+                <a href="#perguntas" class="whitespace-nowrap bg-black text-[#f4dd19] px-3 py-2 border-2 border-black">3 perguntas</a>
+            </nav>
         </div>
     </section>
 
-    <main class="max-w-6xl mx-auto px-4 py-12 space-y-16">
+    <main class="max-w-6xl mx-auto px-4 py-14 md:py-16 space-y-16 md:space-y-20">
         
         <!-- Apresentação -->
         <section id="apresentacao" class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
@@ -462,15 +553,15 @@
 
     </main>
 
-    <footer class="bg-black text-white border-t-4 border-black mt-20 py-8 px-4 text-center font-bold">
-        <div class="max-w-6xl mx-auto space-y-4">
-            <a href="../" class="inline-block bg-[#f4dd19] text-black px-4 py-2 font-black uppercase neo-button no-underline">← Voltar à página inicial</a>
-            <p class="text-sm uppercase text-[#f4dd19]">
-                Proposta Autoral da Uefyerryeni &bull; UFRN 2026
-            </p>
-            <p class="text-xs text-gray-400">
-                Proposta independente para apreciação pública e debate com as chapas candidatas à Reitoria.
-            </p>
+    <footer class="bg-black text-white border-t-4 border-black mt-20 py-9 px-4 font-bold">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <div>
+                <p class="text-sm uppercase text-[#f4dd19] mb-2">Proposta autoral da Uefyerryeni • UFRN 2026</p>
+                <p class="text-xs text-gray-400 max-w-2xl mb-0">
+                    Proposta independente para apreciação pública e debate com as chapas candidatas à Reitoria.
+                </p>
+            </div>
+            <a href="../" class="inline-block bg-[#f4dd19] text-black px-4 py-2 font-black uppercase neo-button no-underline self-start md:self-auto">← Portal Uefyerryeni</a>
         </div>
     </footer>
 
