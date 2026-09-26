@@ -1,1 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rede UFRN de Comunicação Científica e Social | Proposta Uefyerryeni</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Archivo Narrow -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        neoyellow: '#f4dd19',
+                        neoblack: '#000000',
+                        neowhite: '#ffffff',
+                        neogray: '#f3f4f6'
+                    },
+                    fontFamily: {
+                        archivo: ['"Archivo Narrow"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Archivo Narrow', sans-serif;
+            background-color: #fffdf0;
+            color: #000000;
+            font-size: 18px;
+            line-height: 1.45;
+            letter-spacing: 0;
+        }
+        h1, h2, h3 {
+            letter-spacing: 0 !important;
+            text-wrap: balance;
+        }
+        h1 {
+            line-height: 0.92 !important;
+        }
+        h2, h3 {
+            line-height: 1 !important;
+        }
+        p, li {
+            letter-spacing: 0 !important;
+        }
+        main p,
+        main li {
+            font-weight: 500;
+        }
+        main strong {
+            font-weight: 700;
+        }
+        .text-note {
+            font-style: italic;
+            font-weight: 500 !important;
+            line-height: 1.18;
+        }
+        .body-card {
+            font-size: clamp(1.08rem, 1.7vw, 1.32rem);
+            line-height: 1.34;
+        }
+        .section-title {
+            font-size: clamp(2.35rem, 5vw, 4.35rem);
+        }
+        .small-title {
+            font-size: clamp(1.8rem, 3vw, 2.6rem);
+        }
+        .neo-box {
+            border: 3px solid #000000;
+            box-shadow: 4px 4px 0px #000000;
+            transition: all 0.1s ease-in-out;
+        }
+        .neo-box-lg {
+            border: 4px solid #000000;
+            box-shadow: 6px 6px 0px #000000;
+        }
+        .neo-button {
+            border: 3px solid #000000;
+            box-shadow: 4px 4px 0px #000000;
+            transition: all 0.08s ease;
+        }
+        .neo-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #000000;
+        }
+        .neo-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000000;
+        }
+        .neo-badge {
+            border: 2px solid #000000;
+            box-shadow: 2px 2px 0px #000000;
+        }
+    </style>
+</head>
+<body class="bg-[#fffdf0] text-black antialiased selection:bg-[#f4dd19] selection:text-black">
 
+    <header class="sticky top-0 z-50 bg-[#f4dd19] border-b-4 border-black px-4 py-3">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-2">
+                <span class="bg-black text-[#f4dd19] font-black px-3 py-1 text-xl neo-box rotate-[-2deg]">UEFYERRYENI</span>
+                <span class="font-bold text-lg hidden sm:inline">Rede UFRN de Comunicação</span>
+            </div>
+            <nav class="hidden md:flex items-center space-x-3 text-sm font-bold uppercase">
+                <a href="#apresentacao" class="bg-white px-3 py-1 neo-box hover:bg-black hover:text-white transition-colors">Apresentação</a>
+                <a href="#justificativa" class="bg-white px-3 py-1 neo-box hover:bg-black hover:text-white transition-colors">Justificativa</a>
+                <a href="#objetivos" class="bg-white px-3 py-1 neo-box hover:bg-black hover:text-white transition-colors">Objetivos</a>
+                <a href="#funcionamento" class="bg-white px-3 py-1 neo-box hover:bg-black hover:text-white transition-colors">Como Funciona</a>
+                <a href="#download" class="bg-white px-3 py-1 neo-box hover:bg-black hover:text-white transition-colors">Documento</a>
+                <a href="#perguntas" class="bg-white px-3 py-1 neo-box hover:bg-black hover:text-white transition-colors">3 Perguntas</a>
+                <a href="#chapas" class="bg-black text-[#f4dd19] px-3 py-1 neo-box hover:bg-white hover:text-black transition-colors">Para as Chapas</a>
+            </nav>
+            <div class="flex items-center">
+                <a href="#chapas" class="neo-button bg-white px-4 py-1.5 font-black text-sm uppercase">Proposta 2026</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative bg-[#f4dd19] border-b-4 border-black py-12 md:py-20 px-4">
+        <div class="max-w-6xl mx-auto text-center space-y-6">
+            <div class="inline-block bg-black text-white px-4 py-1.5 font-bold text-sm uppercase neo-box rotate-[1deg]">
+                Proposta Autoral às Chapas Candidatas à Reitoria da UFRN
+            </div>
+            <h1 class="text-5xl sm:text-7xl md:text-8xl font-black uppercase leading-none">
+                Rede UFRN de Comunicação Científica e Social
+            </h1>
+            <p class="text-note text-2xl sm:text-3xl max-w-4xl mx-auto bg-white p-5 neo-box">
+                Por uma política de comunicação em rede, conectada aos laboratórios, à pesquisa e à sociedade.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4 pt-4">
+                <a href="#apresentacao" class="neo-button bg-black text-[#f4dd19] px-8 py-4 font-black text-lg uppercase">
+                    Ler Proposta &rarr;
+                </a>
+                <a href="#objetivos" class="neo-button bg-white text-black px-8 py-4 font-black text-lg uppercase">
+                    Ver Objetivos
+                </a>
+                <a href="#download" class="neo-button bg-white text-black px-8 py-4 font-black text-lg uppercase">
+                    Baixar Documento
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-6xl mx-auto px-4 py-12 space-y-16">
+        
+        <!-- Apresentação -->
+        <section id="apresentacao" class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+            <div class="md:col-span-1 bg-black text-white p-6 neo-box">
+                <span class="bg-[#f4dd19] text-black font-black px-2 py-1 text-xs uppercase inline-block mb-3">01 / Contexto</span>
+                <h2 class="small-title font-black uppercase text-[#f4dd19]">Apresentação</h2>
+                <p class="text-note text-gray-300 mt-4 text-lg">
+                    Uma análise crítica e cotidiana da comunicação institucional da Universidade Federal do Rio Grande do Norte.
+                </p>
+            </div>
+            <div class="md:col-span-2 bg-white p-8 neo-box-lg space-y-4 body-card">
+                <p>
+                    Esta proposta surge da experiência de <strong>8 anos de acompanhamento</strong> que a <strong>Uefyerryeni</strong> tem feito sobre a comunicação da Universidade Federal do Rio Grande do Norte (UFRN). Nesse período, a iniciativa acompanhou demandas estudantis, gargalos de informação, falhas de circulação interna, barreiras de linguagem e limites dos canais institucionais para responder ao ritmo da vida universitária.
+                </p>
+                <p>
+                    Não se trata de desmerecer o que já é feito. Portal, redes sociais, TVU, rádio universitária, boletins e demais canais cumprem papel importante. <strong>O problema é estrutural:</strong> a UFRN produz mais conhecimento, serviço, pesquisa, extensão e impacto social do que seus canais centrais conseguem acompanhar.
+                </p>
+                <div class="bg-[#fffdf0] border-2 border-black p-5 font-bold text-xl leading-tight">
+                    Por isso, a Uefyerryeni propõe às chapas candidatas à Reitoria a criação da <span class="bg-[#f4dd19] px-1">Rede UFRN de Comunicação Científica e Social</span>: uma política permanente em rede, conectando laboratórios, grupos de pesquisa, projetos, estudantes, servidores e comunicadores para aproximar a universidade da sociedade.
+                </div>
+            </div>
+        </section>
+
+        <!-- Eixo Estruturante -->
+        <section class="bg-white p-8 neo-box-lg space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b-4 border-black pb-4">
+                <div>
+                    <span class="bg-black text-[#f4dd19] font-black px-2 py-1 text-xs uppercase">02 / Visão Estratégica</span>
+                    <h2 class="section-title font-black uppercase mt-1">Comunicação como Eixo Estruturante</h2>
+                </div>
+                <div class="bg-[#f4dd19] border-2 border-black px-4 py-2 font-black uppercase text-sm">
+                    Ensino + Pesquisa + Extensão + Comunicação
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 body-card">
+                <div class="bg-[#fffdf0] p-6 neo-box">
+                    <h3 class="text-xl font-black uppercase mb-2 text-black flex items-center">
+                        <span class="bg-black text-white w-6 h-6 inline-flex items-center justify-center mr-2 text-sm">!</span>
+                        O Desafio Contemporâneo
+                    </h3>
+                    <p>
+                        A universidade pública brasileira construiu sua história sobre o tripé do ensino, da pesquisa e da extensão. Esses pilares continuam sendo a base de tudo o que ela faz, mas a circulação contemporânea da informação, a disputa pela atenção coletiva e o avanço da desinformação exigem um passo além: compreender a comunicação como <strong>parte viva e estratégica do compromisso universitário</strong>.
+                    </p>
+                </div>
+                <div class="bg-[#fffdf0] p-6 neo-box">
+                    <h3 class="text-xl font-black uppercase mb-2 text-black flex items-center">
+                        <span class="bg-black text-white w-6 h-6 inline-flex items-center justify-center mr-2 text-sm">✓</span>
+                        Prestar Contas à Sociedade
+                    </h3>
+                    <p>
+                        Uma instituição pública não cumpre seu papel social apenas produzindo conhecimento. Ela precisa fazer esse saber circular, mostrar por que ele importa para a vida das pessoas e construir diálogo aberto e permanente com a sociedade. A comunicação não deve ser um apêndice promocional, mas um elo entre ensino, pesquisa, extensão e vida social.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Justificativa -->
+        <section id="justificativa" class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+            <div class="md:col-span-1 bg-[#f4dd19] p-6 neo-box">
+                <span class="bg-black text-[#f4dd19] font-black px-2 py-1 text-xs uppercase inline-block mb-3">03 / Diagnóstico</span>
+                <h2 class="small-title font-black uppercase text-black">Justificativa</h2>
+                <p class="text-note text-black mt-4 text-lg">
+                    Por que o modelo centralizado e vertical atual precisa ser complementado por uma rede capilarizada?
+                </p>
+            </div>
+            <div class="md:col-span-2 bg-white p-8 neo-box-lg space-y-4 body-card">
+                <p>
+                    Na UFRN, a produção de conhecimento se espalha por diferentes campi e múltiplos espaços: salas de aula, grupos de estudo, laboratórios, bases de pesquisa, projetos de extensão e hospitais universitários. Apesar dessa capilaridade, muitas iniciativas seguem pouco visíveis para a sociedade e, às vezes, para a própria comunidade acadêmica.
+                </p>
+                <p>
+                    A comunicação institucional ainda tende a funcionar de forma concentrada e verticalizada: a informação precisa alcançar os canais oficiais para ser selecionada, tratada e publicada. Esse modelo cumpre papel importante, mas não dá conta sozinho de uma universidade tão grande, diversa e distribuída.
+                </p>
+                <p>
+                    A rede busca aproximar os canais institucionais dos lugares onde a vida científica e social acontece, sem substituir a comunicação oficial. A proposta é fortalecê-la com novos fluxos de escuta, curadoria e colaboração.
+                </p>
+                <div class="bg-black text-[#f4dd19] p-5 font-black text-xl leading-tight">
+                    Comunicar ciência não é transformar toda pesquisa em conteúdo viral. A universidade precisa construir pautas próprias e estabelecer seus ritmos!
+                </div>
+            </div>
+        </section>
+
+        <!-- Diálogo com o debate eleitoral -->
+        <section class="bg-[#f4dd19] p-8 neo-box-lg space-y-5">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b-4 border-black pb-4">
+                <div>
+                    <span class="bg-black text-[#f4dd19] font-black px-2 py-1 text-xs uppercase">04 / Contribuição ao Debate</span>
+                    <h2 class="section-title font-black uppercase mt-1">Uma proposta para concretizar a comunicação científica</h2>
+                </div>
+            </div>
+            <p class="text-note text-2xl sm:text-3xl max-w-5xl">
+                As chapas candidatas à Reitoria já reconhecem, em graus diferentes, a importância da comunicação científica e da comunicação pública. A contribuição desta proposta é transformar essa preocupação em desenho institucional concreto: uma rede permanente entre laboratórios, grupos de pesquisa e comunicação institucional, com formação, infraestrutura, investimento e acompanhamento.
+            </p>
+        </section>
+
+        <!-- Objetivos (Geral e Específicos) -->
+        <section id="objetivos" class="space-y-8">
+            <div class="bg-black text-white p-6 neo-box">
+                <span class="bg-[#f4dd19] text-black font-black px-2 py-1 text-xs uppercase">05 / Metas</span>
+                <h2 class="section-title font-black uppercase text-[#f4dd19] mt-1">Objetivos da Rede</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Objetivo Geral -->
+                <div class="bg-[#f4dd19] p-8 neo-box-lg flex flex-col justify-between">
+                    <div>
+                        <span class="bg-black text-white px-3 py-1 font-black text-xs uppercase neo-badge">Objetivo Geral</span>
+                        <h3 class="small-title font-black uppercase mt-4 mb-3">Criar uma rede permanente</h3>
+                        <p class="body-card">
+                            Criar uma rede permanente de comunicação científica e social entre laboratórios, grupos de pesquisa, projetos de extensão e demais unidades produtoras de conhecimento da UFRN, ampliando a visibilidade pública da produção acadêmica, fortalecendo a prestação de contas à sociedade e promovendo uma cultura institucional de divulgação científica.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t-2 border-black font-black text-xs uppercase">
+                        Impacto Direto na Sociedade
+                    </div>
+                </div>
+
+                <!-- Objetivos Específicos -->
+                <div class="bg-white p-8 neo-box-lg flex flex-col justify-between">
+                    <div>
+                        <span class="bg-black text-white px-3 py-1 font-black text-xs uppercase neo-badge">Objetivos Específicos</span>
+                        <ul class="mt-4 space-y-3 text-sm font-bold">
+                            <li class="flex items-start bg-[#fffdf0] p-2 neo-box"><span class="bg-black text-white w-5 h-5 flex items-center justify-center mr-2 text-xs flex-shrink-0">1</span>Ampliar a divulgação das pesquisas, projetos, serviços e ações desenvolvidas na UFRN.</li>
+                            <li class="flex items-start bg-[#fffdf0] p-2 neo-box"><span class="bg-black text-white w-5 h-5 flex items-center justify-center mr-2 text-xs flex-shrink-0">2</span>Aproximar a universidade da sociedade com linguagem acessível, qualificada e socialmente relevante.</li>
+                            <li class="flex items-start bg-[#fffdf0] p-2 neo-box"><span class="bg-black text-white w-5 h-5 flex items-center justify-center mr-2 text-xs flex-shrink-0">3</span>Valorizar docentes, técnicos, estudantes, bolsistas e pesquisadores envolvidos na produção científica.</li>
+                            <li class="flex items-start bg-[#fffdf0] p-2 neo-box"><span class="bg-black text-white w-5 h-5 flex items-center justify-center mr-2 text-xs flex-shrink-0">4</span>Criar fluxos permanentes entre laboratórios, grupos de pesquisa e canais institucionais.</li>
+                            <li class="flex items-start bg-[#fffdf0] p-2 neo-box"><span class="bg-black text-white w-5 h-5 flex items-center justify-center mr-2 text-xs flex-shrink-0">5</span>Formar pessoas da comunidade acadêmica como pontos de contato e agentes de comunicação científica.</li>
+                            <li class="flex items-start bg-[#fffdf0] p-2 neo-box"><span class="bg-black text-white w-5 h-5 flex items-center justify-center mr-2 text-xs flex-shrink-0">6</span>Fortalecer a presença da UFRN no debate público sobre questões sociais, econômicas, ambientais, culturais, tecnológicas e científicas.</li>
+                            <li class="flex items-start bg-[#fffdf0] p-2 neo-box"><span class="bg-black text-white w-5 h-5 flex items-center justify-center mr-2 text-xs flex-shrink-0">7</span>Reconhecer a comunicação como dimensão estruturante da universidade contemporânea.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Como a Rede Funciona & Formação -->
+        <section id="funcionamento" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Como funciona -->
+            <div class="bg-white p-8 neo-box-lg space-y-4">
+                <span class="bg-black text-white px-3 py-1 font-black text-xs uppercase neo-badge">06 / Operacionalização</span>
+                <h3 class="small-title font-black uppercase">Como a rede funcionaria?</h3>
+                <ul class="space-y-4 body-card">
+                    <li class="border-2 border-black p-4 bg-[#fffdf0] neo-box">
+                        <strong class="uppercase text-black block mb-1">Rede de referências</strong>
+                        Composta por representantes de laboratórios, grupos de pesquisa, núcleos, programas de pós-graduação, projetos de extensão e demais iniciativas acadêmicas interessadas.
+                    </li>
+                    <li class="border-2 border-black p-4 bg-[#fffdf0] neo-box">
+                        <strong class="uppercase text-black block mb-1">Pontos de Contato</strong>
+                        Cada unidade indicaria uma ou mais referências — docentes, técnicos, estudantes, pós-graduandos, bolsistas ou integrantes dos projetos — para identificar pautas, organizar informações e facilitar o diálogo com a coordenação. Esses pontos de contato não substituem profissionais da comunicação.
+                    </li>
+                    <li class="border-2 border-black p-4 bg-[#fffdf0] neo-box">
+                        <strong class="uppercase text-black block mb-1">Coordenação Estratégica</strong>
+                        Articulada entre comunicação institucional, pesquisa, extensão, inovação, pós-graduação e Departamento de Comunicação, organizando fluxos, formação, apoio à produção e integração entre os canais da UFRN.
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Formação -->
+            <div class="bg-[#f4dd19] p-8 neo-box-lg space-y-4">
+                <span class="bg-black text-[#fff] px-3 py-1 font-black text-xs uppercase neo-badge">07 / Capacitação</span>
+                <h3 class="small-title font-black uppercase">Formação em comunicação pública da ciência</h3>
+                <p class="text-note text-2xl">
+                    Programa permanente para integrantes da rede, construído em parceria com o DECOM, Agecom, TVU, Rádio Universitária, programas de pós-graduação, projetos de extensão e demais setores interessados.
+                </p>
+                <div class="space-y-2 text-lg font-bold">
+                    <div class="bg-white p-3 neo-box">✓ Identificação de pautas científicas e sociais</div>
+                    <div class="bg-white p-3 neo-box">✓ Linguagem acessível e tradução do conhecimento</div>
+                    <div class="bg-white p-3 neo-box">✓ Relação entre pesquisadores e imprensa</div>
+                    <div class="bg-white p-3 neo-box">✓ Produção de textos, vídeos, podcasts e dados</div>
+                    <div class="bg-white p-3 neo-box">✓ Ética, combate à desinformação e inclusão</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Estrutura, Investimento e Produtos -->
+        <section class="bg-white p-8 neo-box-lg space-y-8">
+            <div class="border-b-4 border-black pb-4">
+                <span class="bg-black text-[#f4dd19] font-black px-2 py-1 text-xs uppercase">08 / Recursos e Ações</span>
+                <h2 class="section-title font-black uppercase mt-1">Estrutura, Investimento e Produtos</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-[#fffdf0] p-6 neo-box">
+                    <h3 class="text-xl font-black uppercase mb-3 bg-[#f4dd19] p-2 border-2 border-black">Investimento</h3>
+                    <p class="text-lg leading-snug">
+                        Para não depender de voluntarismo, a rede precisa de estrutura institucional e investimento permanente: coordenação própria, equipe técnica, bolsistas de graduação e pós-graduação, editais internos, equipamentos compartilhados, apoio a edição, legendagem, design e acessibilidade e uma plataforma digital para cadastro de laboratórios, fontes e pautas.
+                    </p>
+                </div>
+                <div class="bg-[#fffdf0] p-6 neo-box">
+                    <h3 class="text-xl font-black uppercase mb-3 bg-[#f4dd19] p-2 border-2 border-black">Produtos da Rede</h3>
+                    <ul class="text-lg space-y-2 leading-snug">
+                        <li>• Boletim periódico de pesquisas e laboratórios</li>
+                        <li>• Banco público de fontes científicas</li>
+                        <li>• Portal ou seção sobre laboratórios e grupos</li>
+                        <li>• Séries de vídeos curtos sobre pesquisas</li>
+                        <li>• Podcasts, reportagens especiais e materiais para imprensa</li>
+                        <li>• Relatórios anuais de impacto social</li>
+                        <li>• Mostras e encontros entre laboratórios e comunicadores</li>
+                        <li>• Conteúdos para escolas, movimentos sociais, gestores e comunidades</li>
+                    </ul>
+                </div>
+                <div class="bg-[#fffdf0] p-6 neo-box">
+                    <h3 class="text-xl font-black uppercase mb-3 bg-[#f4dd19] p-2 border-2 border-black">Princípios</h3>
+                    <ul class="text-lg space-y-2 leading-snug">
+                        <li>• Comunicação pública como parte da missão da universidade</li>
+                        <li>• Linguagem acessível sem perda de rigor</li>
+                        <li>• Compromisso com o interesse público</li>
+                        <li>• Respeito à diversidade de áreas do conhecimento</li>
+                        <li>• Combate à desinformação</li>
+                        <li>• Acessibilidade e inclusão</li>
+                        <li>• Valorização de estudantes, técnicos, docentes e pesquisadores</li>
+                        <li>• Pautas próprias, sem submissão à lógica das plataformas</li>
+                        <li>• Comunicação como eixo estratégico da universidade</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Documento completo -->
+        <section id="download" class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+            <div class="md:col-span-1 bg-[#f4dd19] p-6 neo-box">
+                <span class="bg-black text-[#f4dd19] font-black px-2 py-1 text-xs uppercase inline-block mb-3">09 / Documento Completo</span>
+                <h2 class="small-title font-black uppercase text-black">Baixar a Proposta</h2>
+                <p class="text-note text-black mt-4 text-lg">
+                    Versão organizada para envio às chapas candidatas e circulação pública.
+                </p>
+            </div>
+            <div class="md:col-span-2 bg-white p-8 neo-box-lg space-y-5">
+                <p class="body-card">
+                    O documento completo reúne a justificativa, os objetivos, o desenho institucional da rede, a proposta de formação, a necessidade de investimento e os compromissos esperados das chapas candidatas à Reitoria.
+                </p>
+                <a href="Proposta_Rede_UFRN_Uefyerryeni.pdf" download class="neo-button inline-block bg-black text-[#f4dd19] px-8 py-4 font-black text-lg uppercase">
+                    Baixar documento completo
+                </a>
+                <p class="text-sm font-bold uppercase text-gray-700">
+                    Arquivo em formato PDF
+                </p>
+            </div>
+        </section>
+
+        <!-- O que se espera das chapas -->
+        <section id="chapas" class="bg-black text-white p-8 neo-box-lg space-y-6">
+            <div class="flex items-center space-x-2">
+                <span class="bg-[#f4dd19] text-black font-black px-3 py-1 text-xs uppercase neo-badge">10 / Compromisso Eleitoral</span>
+            </div>
+            <h2 class="section-title font-black uppercase text-[#f4dd19]">
+                O que se espera das Chapas Candidatas?
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+                <div class="bg-white text-black p-6 neo-box text-lg leading-snug">
+                    <span class="text-2xl font-black block mb-2 text-[#f4dd19] bg-black p-1 w-10 text-center">01</span>
+                    Reconhecer a comunicação como dimensão estratégica da universidade pública contemporânea.
+                </div>
+                <div class="bg-white text-black p-6 neo-box text-lg leading-snug">
+                    <span class="text-2xl font-black block mb-2 text-[#f4dd19] bg-black p-1 w-10 text-center">02</span>
+                    Assumir o compromisso de criar ou fortalecer política permanente de comunicação em rede.
+                </div>
+                <div class="bg-white text-black p-6 neo-box text-lg leading-snug">
+                    <span class="text-2xl font-black block mb-2 text-[#f4dd19] bg-black p-1 w-10 text-center">03</span>
+                    Apresentar propostas concretas de estrutura, investimento, formação e integração.
+                </div>
+                <div class="bg-white text-black p-6 neo-box text-lg leading-snug">
+                    <span class="text-2xl font-black block mb-2 text-[#f4dd19] bg-black p-1 w-10 text-center">04</span>
+                    Tratar a divulgação científica como parte da responsabilidade pública da UFRN.
+                </div>
+            </div>
+        </section>
+
+        <!-- Perguntas às chapas -->
+        <section id="perguntas" class="bg-white p-8 neo-box-lg space-y-7">
+            <div class="border-b-4 border-black pb-4">
+                <span class="bg-black text-[#f4dd19] font-black px-2 py-1 text-xs uppercase">11 / Resposta das Chapas</span>
+                <h2 class="section-title font-black uppercase mt-1">Três perguntas para tirar a Rede do papel</h2>
+            </div>
+            <p class="body-card max-w-5xl">
+                A proposta foi desenhada de forma aberta para permitir construção coletiva. Para avançar do diagnóstico ao compromisso prático, a Uefyerryeni convida cada chapa a se posicionar sobre três questões centrais.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <article class="bg-[#f4dd19] p-6 neo-box flex flex-col gap-3">
+                    <span class="bg-black text-[#f4dd19] w-10 h-10 flex items-center justify-center font-black text-xl">01</span>
+                    <h3 class="text-2xl font-black uppercase">Governança e articulação</h3>
+                    <p class="text-lg font-bold leading-snug">Como a chapa enxerga a coordenação dessa Rede dentro da estrutura da UFRN para articular pesquisa, extensão e comunicação institucional com agilidade, sem criar mais uma instância burocrática?</p>
+                </article>
+                <article class="bg-black text-white p-6 neo-box flex flex-col gap-3">
+                    <span class="bg-[#f4dd19] text-black w-10 h-10 flex items-center justify-center font-black text-xl">02</span>
+                    <h3 class="text-2xl font-black uppercase text-[#f4dd19]">Incentivo e permanência</h3>
+                    <p class="text-lg font-bold leading-snug">Que mecanismos práticos — editais internos, bolsas específicas, reconhecimento de carga horária ou pontuação acadêmica — a chapa pretende adotar para engajar a comunidade sem depender de voluntarismo?</p>
+                </article>
+                <article class="bg-[#fffdf0] p-6 neo-box flex flex-col gap-3">
+                    <span class="bg-black text-white w-10 h-10 flex items-center justify-center font-black text-xl">03</span>
+                    <h3 class="text-2xl font-black uppercase">Primeiro passo na gestão</h3>
+                    <p class="text-lg font-bold leading-snug">Caso eleita, qual seria a ação concreta da chapa já no primeiro ano de mandato para tirar a Rede do papel — por exemplo, um projeto-piloto, edital inicial ou grupo de trabalho com prazo definido?</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Síntese Final -->
+        <section class="bg-[#f4dd19] p-8 md:p-12 neo-box-lg space-y-6 text-center">
+            <span class="bg-black text-white px-4 py-1 font-black text-sm uppercase inline-block neo-badge">Síntese Final</span>
+            <h2 class="section-title font-black uppercase">A UFRN precisa comunicar melhor</h2>
+            <p class="text-note text-2xl sm:text-3xl max-w-4xl mx-auto">
+                O desafio da UFRN não está apenas em comunicar em maior volume, mas em comunicar melhor, garantindo capilaridade, trabalho contínuo e vínculo direto com os espaços onde a ciência é produzida. A Rede propõe integrar laboratórios, grupos de pesquisa e projetos acadêmicos como pontos ativos de uma política institucional de comunicação pública da ciência. Ensino, pesquisa e extensão seguem na base dessa construção, mas a universidade do nosso tempo precisa reconhecer que sua relevância, permanência e legitimidade pública também dependem da capacidade de comunicar.
+            </p>
+            <div class="pt-4">
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="neo-button bg-black text-[#f4dd19] px-8 py-4 font-black uppercase text-base">
+                    &uarr; Voltar ao Topo
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-black text-white border-t-4 border-black mt-20 py-8 px-4 text-center font-bold">
+        <div class="max-w-6xl mx-auto space-y-4">
+            <p class="text-sm uppercase text-[#f4dd19]">
+                Proposta Autoral da Uefyerryeni &bull; UFRN 2026
+            </p>
+            <p class="text-xs text-gray-400">
+                Proposta independente para apreciação pública e debate com as chapas candidatas à Reitoria.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
