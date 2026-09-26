@@ -223,14 +223,27 @@
 
         <article class="mobile-card bg-white p-8 neo-lg md:min-h-[390px] flex flex-col justify-between">
           <div>
-            <span class="inline-block bg-black text-white px-3 py-1 font-black uppercase text-xs neo mb-5">Em migração</span>
+            <div class="flex flex-wrap items-center gap-3 mb-5">
+              <span class="inline-block bg-black text-white px-3 py-1 font-black uppercase text-xs neo">Em migração</span>
+              <span class="inline-block bg-[#f4dd19] text-black px-3 py-1 border-2 border-black font-black uppercase text-xs">Site ativo</span>
+            </div>
+
             <h3 class="text-4xl md:text-5xl font-black uppercase leading-none mb-5">Observatório UEFY</h3>
-            <p class="text-xl font-semibold leading-snug">
-              Projeto de acompanhamento e leitura crítica da comunicação e da vida institucional universitária. A versão atual permanece publicada em seu endereço original enquanto a migração é preparada.
+
+            <p class="text-xl font-semibold leading-snug mb-4">
+              Um espaço de acompanhamento da vida institucional da UFRN, com foco em comunicação, decisões, movimentações e temas que ajudam a entender como a Universidade se apresenta — e se explica — para a própria comunidade.
+            </p>
+
+            <p class="text-lg font-semibold leading-snug mb-0">
+              O Observatório reúne leituras, registros e análises independentes sobre o que acontece na Universidade. A versão atual continua disponível normalmente enquanto a migração para este portal é preparada.
             </p>
           </div>
-          <div class="border-2 border-black bg-[#ecebe2] px-6 py-4 font-black uppercase text-lg mt-8 opacity-70">
-            Em breve neste portal
+
+          <div class="mt-8 space-y-3">
+            <a href="https://observatorio-uefy.netlify.app/" target="_blank" rel="noopener noreferrer" class="mobile-stack-btn tap-target neo-btn bg-black text-[#f4dd19] px-6 py-4 font-black uppercase text-lg inline-flex items-center justify-between gap-6 no-underline">
+              Acessar o Observatório <span aria-hidden="true">↗</span>
+            </a>
+            <p class="text-sm font-black uppercase text-gray-600 mb-0">Versão atual hospedada no Netlify</p>
           </div>
         </article>
       </div>
