@@ -35,6 +35,8 @@
             font-size: 18px;
             line-height: 1.45;
             letter-spacing: 0;
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
         }
         h1, h2, h3 {
             letter-spacing: 0 !important;
@@ -139,9 +141,25 @@
                 align-items: stretch;
             }
         }
+        a, button, summary { touch-action: manipulation; }
+        a:focus-visible, button:focus-visible, summary:focus-visible {
+            outline: 3px solid #000;
+            outline-offset: 3px;
+        }
+        .tap-target { min-height: 44px; }
+
         @media (max-width: 768px) {
             .hero-title {
-                font-size: clamp(3rem, 15vw, 5rem);
+                font-size: clamp(2.85rem, 13.5vw, 4.75rem);
+                line-height: .9 !important;
+                overflow-wrap: anywhere;
+            }
+            .section-title {
+                font-size: clamp(2.15rem, 10.5vw, 3.35rem);
+                line-height: .95;
+            }
+            .small-title {
+                font-size: clamp(1.8rem, 8.5vw, 2.5rem);
             }
             .mobile-menu summary {
                 list-style: none;
@@ -149,6 +167,19 @@
             .mobile-menu summary::-webkit-details-marker {
                 display: none;
             }
+            .mobile-card {
+                padding: 1.25rem !important;
+            }
+            .mobile-stack-btn {
+                width: 100%;
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+            .neo-box { box-shadow: 3px 3px 0 #000; }
+            .neo-box-lg { box-shadow: 4px 4px 0 #000; }
+            .neo-button { box-shadow: 3px 3px 0 #000; }
         }
     </style>
 </head>
@@ -159,8 +190,8 @@
             <a href="../" class="flex items-center gap-3 no-underline min-w-0" aria-label="Voltar à página inicial da Uefyerryeni">
                 <img src="../uefyerryeni-logo.png" alt="Marca Uefyerryeni" class="brand-mark">
                 <div class="min-w-0">
-                    <span class="block font-black text-xl leading-none uppercase">UEFYERRYENI</span>
-                    <span class="block text-xs font-bold uppercase mt-1 truncate">Rede UFRN de Comunicação Científica e Social</span>
+                    <span class="block font-black text-lg sm:text-xl leading-none uppercase">UEFYERRYENI</span>
+                    <span class="hidden sm:block text-xs font-bold uppercase mt-1 truncate">Rede UFRN de Comunicação Científica e Social</span>
                 </div>
             </a>
 
@@ -173,20 +204,20 @@
             </nav>
 
             <details class="mobile-menu lg:hidden relative">
-                <summary class="neo-button bg-black text-[#f4dd19] px-4 py-2 font-black uppercase text-sm cursor-pointer">Menu</summary>
+                <summary class="tap-target neo-button bg-black text-[#f4dd19] px-4 py-2 font-black uppercase text-sm cursor-pointer flex items-center">Menu</summary>
                 <div class="absolute right-0 mt-3 w-64 bg-white p-3 neo-box space-y-2">
-                    <a href="../" class="block border-2 border-black px-3 py-2 font-black uppercase text-sm">← Portal Uefyerryeni</a>
-                    <a href="#apresentacao" class="block border-2 border-black px-3 py-2 font-black uppercase text-sm">Contexto</a>
-                    <a href="#objetivos" class="block border-2 border-black px-3 py-2 font-black uppercase text-sm">Objetivos</a>
-                    <a href="#funcionamento" class="block border-2 border-black px-3 py-2 font-black uppercase text-sm">Funcionamento</a>
-                    <a href="#download" class="block border-2 border-black px-3 py-2 font-black uppercase text-sm">Documento</a>
-                    <a href="#perguntas" class="block bg-black text-[#f4dd19] border-2 border-black px-3 py-2 font-black uppercase text-sm">3 perguntas</a>
+                    <a href="../" class="tap-target flex items-center border-2 border-black px-3 py-2 font-black uppercase text-sm">← Portal Uefyerryeni</a>
+                    <a href="#apresentacao" class="tap-target flex items-center border-2 border-black px-3 py-2 font-black uppercase text-sm">Contexto</a>
+                    <a href="#objetivos" class="tap-target flex items-center border-2 border-black px-3 py-2 font-black uppercase text-sm">Objetivos</a>
+                    <a href="#funcionamento" class="tap-target flex items-center border-2 border-black px-3 py-2 font-black uppercase text-sm">Funcionamento</a>
+                    <a href="#download" class="tap-target flex items-center border-2 border-black px-3 py-2 font-black uppercase text-sm">Documento</a>
+                    <a href="#perguntas" class="tap-target flex items-center bg-black text-[#f4dd19] border-2 border-black px-3 py-2 font-black uppercase text-sm">3 perguntas</a>
                 </div>
             </details>
         </div>
     </header>
 
-    <section class="relative bg-[#f4dd19] border-b-4 border-black px-4 py-10 md:py-16">
+    <section class="relative bg-[#f4dd19] border-b-4 border-black px-4 py-8 sm:py-10 md:py-16">
         <div class="max-w-6xl mx-auto">
             <div class="flex flex-wrap items-center gap-2 mb-7">
                 <a href="../" class="bg-white px-3 py-1.5 font-black text-xs uppercase neo-badge no-underline">Portal Uefyerryeni</a>
@@ -209,10 +240,10 @@
                     </p>
 
                     <div class="flex flex-wrap gap-3 pt-7">
-                        <a href="#apresentacao" class="neo-button bg-black text-[#f4dd19] px-6 py-3 font-black text-base uppercase">
+                        <a href="#apresentacao" class="mobile-stack-btn tap-target neo-button bg-black text-[#f4dd19] px-6 py-3 font-black text-base uppercase">
                             Entender a proposta →
                         </a>
-                        <a href="#download" class="neo-button bg-white text-black px-6 py-3 font-black text-base uppercase">
+                        <a href="#download" class="mobile-stack-btn tap-target neo-button bg-white text-black px-6 py-3 font-black text-base uppercase">
                             Baixar PDF
                         </a>
                     </div>
@@ -241,18 +272,18 @@
         </div>
     </section>
 
-    <main class="max-w-6xl mx-auto px-4 py-14 md:py-16 space-y-16 md:space-y-20">
+    <main class="max-w-6xl mx-auto px-4 py-10 sm:py-14 md:py-16 space-y-12 sm:space-y-16 md:space-y-20">
         
         <!-- Apresentação -->
         <section id="apresentacao" class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-            <div class="md:col-span-1 bg-black text-white p-6 neo-box">
+            <div class="mobile-card md:col-span-1 bg-black text-white p-6 neo-box">
                 <span class="bg-[#f4dd19] text-black font-black px-2 py-1 text-xs uppercase inline-block mb-3">01 / Contexto</span>
                 <h2 class="small-title font-black uppercase text-[#f4dd19]">Apresentação</h2>
                 <p class="text-note text-gray-300 mt-4 text-lg">
                     Uma análise crítica e cotidiana da comunicação institucional da Universidade Federal do Rio Grande do Norte.
                 </p>
             </div>
-            <div class="md:col-span-2 bg-white p-8 neo-box-lg space-y-4 body-card">
+            <div class="mobile-card md:col-span-2 bg-white p-8 neo-box-lg space-y-4 body-card">
                 <p>
                     Esta proposta surge da experiência de <strong>8 anos de acompanhamento</strong> que a <strong>Uefyerryeni</strong> tem feito sobre a comunicação da Universidade Federal do Rio Grande do Norte (UFRN). Nesse período, a iniciativa acompanhou demandas estudantis, gargalos de informação, falhas de circulação interna, barreiras de linguagem e limites dos canais institucionais para responder ao ritmo da vida universitária.
                 </p>
@@ -266,7 +297,7 @@
         </section>
 
         <!-- Eixo Estruturante -->
-        <section class="bg-white p-8 neo-box-lg space-y-6">
+        <section class="mobile-card bg-white p-8 neo-box-lg space-y-6">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b-4 border-black pb-4">
                 <div>
                     <span class="bg-black text-[#f4dd19] font-black px-2 py-1 text-xs uppercase">02 / Visão Estratégica</span>
@@ -300,14 +331,14 @@
 
         <!-- Justificativa -->
         <section id="justificativa" class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-            <div class="md:col-span-1 bg-[#f4dd19] p-6 neo-box">
+            <div class="mobile-card md:col-span-1 bg-[#f4dd19] p-6 neo-box">
                 <span class="bg-black text-[#f4dd19] font-black px-2 py-1 text-xs uppercase inline-block mb-3">03 / Diagnóstico</span>
                 <h2 class="small-title font-black uppercase text-black">Justificativa</h2>
                 <p class="text-note text-black mt-4 text-lg">
                     Por que o modelo centralizado e vertical atual precisa ser complementado por uma rede capilarizada?
                 </p>
             </div>
-            <div class="md:col-span-2 bg-white p-8 neo-box-lg space-y-4 body-card">
+            <div class="mobile-card md:col-span-2 bg-white p-8 neo-box-lg space-y-4 body-card">
                 <p>
                     Na UFRN, a produção de conhecimento se espalha por diferentes campi e múltiplos espaços: salas de aula, grupos de estudo, laboratórios, bases de pesquisa, projetos de extensão e hospitais universitários. Apesar dessa capilaridade, muitas iniciativas seguem pouco visíveis para a sociedade e, às vezes, para a própria comunidade acadêmica.
                 </p>
@@ -324,7 +355,7 @@
         </section>
 
         <!-- Diálogo com o debate eleitoral -->
-        <section class="bg-[#f4dd19] p-8 neo-box-lg space-y-5">
+        <section class="mobile-card bg-[#f4dd19] p-8 neo-box-lg space-y-5">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b-4 border-black pb-4">
                 <div>
                     <span class="bg-black text-[#f4dd19] font-black px-2 py-1 text-xs uppercase">04 / Contribuição ao Debate</span>
@@ -338,14 +369,14 @@
 
         <!-- Objetivos (Geral e Específicos) -->
         <section id="objetivos" class="space-y-8">
-            <div class="bg-black text-white p-6 neo-box">
+            <div class="mobile-card bg-black text-white p-6 neo-box">
                 <span class="bg-[#f4dd19] text-black font-black px-2 py-1 text-xs uppercase">05 / Metas</span>
                 <h2 class="section-title font-black uppercase text-[#f4dd19] mt-1">Objetivos da Rede</h2>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- Objetivo Geral -->
-                <div class="bg-[#f4dd19] p-8 neo-box-lg flex flex-col justify-between">
+                <div class="mobile-card bg-[#f4dd19] p-8 neo-box-lg flex flex-col justify-between">
                     <div>
                         <span class="bg-black text-white px-3 py-1 font-black text-xs uppercase neo-badge">Objetivo Geral</span>
                         <h3 class="small-title font-black uppercase mt-4 mb-3">Criar uma rede permanente</h3>
@@ -359,7 +390,7 @@
                 </div>
 
                 <!-- Objetivos Específicos -->
-                <div class="bg-white p-8 neo-box-lg flex flex-col justify-between">
+                <div class="mobile-card bg-white p-8 neo-box-lg flex flex-col justify-between">
                     <div>
                         <span class="bg-black text-white px-3 py-1 font-black text-xs uppercase neo-badge">Objetivos Específicos</span>
                         <ul class="mt-4 space-y-3 text-sm font-bold">
@@ -379,7 +410,7 @@
         <!-- Como a Rede Funciona & Formação -->
         <section id="funcionamento" class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <!-- Como funciona -->
-            <div class="bg-white p-8 neo-box-lg space-y-4">
+            <div class="mobile-card bg-white p-8 neo-box-lg space-y-4">
                 <span class="bg-black text-white px-3 py-1 font-black text-xs uppercase neo-badge">06 / Operacionalização</span>
                 <h3 class="small-title font-black uppercase">Como a rede funcionaria?</h3>
                 <ul class="space-y-4 body-card">
@@ -399,7 +430,7 @@
             </div>
 
             <!-- Formação -->
-            <div class="bg-[#f4dd19] p-8 neo-box-lg space-y-4">
+            <div class="mobile-card bg-[#f4dd19] p-8 neo-box-lg space-y-4">
                 <span class="bg-black text-[#fff] px-3 py-1 font-black text-xs uppercase neo-badge">07 / Capacitação</span>
                 <h3 class="small-title font-black uppercase">Formação em comunicação pública da ciência</h3>
                 <p class="text-note text-2xl">
@@ -416,7 +447,7 @@
         </section>
 
         <!-- Estrutura, Investimento e Produtos -->
-        <section class="bg-white p-8 neo-box-lg space-y-8">
+        <section class="mobile-card bg-white p-8 neo-box-lg space-y-8">
             <div class="border-b-4 border-black pb-4">
                 <span class="bg-black text-[#f4dd19] font-black px-2 py-1 text-xs uppercase">08 / Recursos e Ações</span>
                 <h2 class="section-title font-black uppercase mt-1">Estrutura, Investimento e Produtos</h2>
@@ -461,18 +492,18 @@
 
         <!-- Documento completo -->
         <section id="download" class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-            <div class="md:col-span-1 bg-[#f4dd19] p-6 neo-box">
+            <div class="mobile-card md:col-span-1 bg-[#f4dd19] p-6 neo-box">
                 <span class="bg-black text-[#f4dd19] font-black px-2 py-1 text-xs uppercase inline-block mb-3">09 / Documento Completo</span>
                 <h2 class="small-title font-black uppercase text-black">Baixar a Proposta</h2>
                 <p class="text-note text-black mt-4 text-lg">
                     Versão organizada para envio às chapas candidatas e circulação pública.
                 </p>
             </div>
-            <div class="md:col-span-2 bg-white p-8 neo-box-lg space-y-5">
+            <div class="mobile-card md:col-span-2 bg-white p-8 neo-box-lg space-y-5">
                 <p class="body-card">
                     O documento completo reúne a justificativa, os objetivos, o desenho institucional da rede, a proposta de formação, a necessidade de investimento e os compromissos esperados das chapas candidatas à Reitoria.
                 </p>
-                <a href="Proposta_Rede_UFRN_Uefyerryeni.pdf" download class="neo-button inline-block bg-black text-[#f4dd19] px-8 py-4 font-black text-lg uppercase">
+                <a href="Proposta_Rede_UFRN_Uefyerryeni.pdf" download class="mobile-stack-btn tap-target neo-button inline-block bg-black text-[#f4dd19] px-8 py-4 font-black text-lg uppercase">
                     Baixar documento completo
                 </a>
                 <p class="text-sm font-bold uppercase text-gray-700">
@@ -482,7 +513,7 @@
         </section>
 
         <!-- O que se espera das chapas -->
-        <section id="chapas" class="bg-black text-white p-8 neo-box-lg space-y-6">
+        <section id="chapas" class="mobile-card bg-black text-white p-8 neo-box-lg space-y-6">
             <div class="flex items-center space-x-2">
                 <span class="bg-[#f4dd19] text-black font-black px-3 py-1 text-xs uppercase neo-badge">10 / Compromisso Eleitoral</span>
             </div>
@@ -510,7 +541,7 @@
         </section>
 
         <!-- Perguntas às chapas -->
-        <section id="perguntas" class="bg-white p-8 neo-box-lg space-y-7">
+        <section id="perguntas" class="mobile-card bg-white p-8 neo-box-lg space-y-7">
             <div class="border-b-4 border-black pb-4">
                 <span class="bg-black text-[#f4dd19] font-black px-2 py-1 text-xs uppercase">11 / Resposta das Chapas</span>
                 <h2 class="section-title font-black uppercase mt-1">Três perguntas para tirar a Rede do papel</h2>
@@ -538,14 +569,14 @@
         </section>
 
         <!-- Síntese Final -->
-        <section class="bg-[#f4dd19] p-8 md:p-12 neo-box-lg space-y-6 text-center">
+        <section class="mobile-card bg-[#f4dd19] p-8 md:p-12 neo-box-lg space-y-6 text-center">
             <span class="bg-black text-white px-4 py-1 font-black text-sm uppercase inline-block neo-badge">Síntese Final</span>
             <h2 class="section-title font-black uppercase">A UFRN precisa comunicar melhor</h2>
             <p class="text-note text-2xl sm:text-3xl max-w-4xl mx-auto">
                 O desafio da UFRN não está apenas em comunicar em maior volume, mas em comunicar melhor, garantindo capilaridade, trabalho contínuo e vínculo direto com os espaços onde a ciência é produzida. A Rede propõe integrar laboratórios, grupos de pesquisa e projetos acadêmicos como pontos ativos de uma política institucional de comunicação pública da ciência. Ensino, pesquisa e extensão seguem na base dessa construção, mas a universidade do nosso tempo precisa reconhecer que sua relevância, permanência e legitimidade pública também dependem da capacidade de comunicar.
             </p>
             <div class="pt-4">
-                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="neo-button bg-black text-[#f4dd19] px-8 py-4 font-black uppercase text-base">
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="mobile-stack-btn tap-target neo-button bg-black text-[#f4dd19] px-8 py-4 font-black uppercase text-base">
                     &uarr; Voltar ao Topo
                 </button>
             </div>
@@ -561,9 +592,22 @@
                     Proposta independente para apreciação pública e debate com as chapas candidatas à Reitoria.
                 </p>
             </div>
-            <a href="../" class="inline-block bg-[#f4dd19] text-black px-4 py-2 font-black uppercase neo-button no-underline self-start md:self-auto">← Portal Uefyerryeni</a>
+            <a href="../" class="mobile-stack-btn tap-target inline-block bg-[#f4dd19] text-black px-4 py-2 font-black uppercase neo-button no-underline self-start md:self-auto">← Portal Uefyerryeni</a>
         </div>
     </footer>
 
+<script>
+  const mobileMenu = document.querySelector('.mobile-menu');
+  if (mobileMenu) {
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.removeAttribute('open'));
+    });
+    document.addEventListener('click', (event) => {
+      if (mobileMenu.hasAttribute('open') && !mobileMenu.contains(event.target)) {
+        mobileMenu.removeAttribute('open');
+      }
+    });
+  }
+</script>
 </body>
 </html>
