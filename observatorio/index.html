@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Observatório Uefy | Programas UFRN</title>
+    <meta name="description" content="Busca e comparação técnica dos programas de chapa para a Reitoria da UFRN.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/uefy-logo.png">
+    <link rel="stylesheet" href="assets/styles.css?v=2026-09-23-layout-results">
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topbar">
+      <div class="brand-lockup" aria-label="Observatório Uefy">
+        <a class="brand-mark" href="https://www.instagram.com/uefyerryeni/" target="_blank" rel="noopener noreferrer" aria-label="Abrir Instagram da UEFY">
+          <img src="assets/uefy-logo.png" alt="">
+        </a>
+        <div>
+          <p class="eyebrow">Iniciativa UEFY</p>
+          <h1>Observatório Uefy</h1>
+        </div>
+      </div>
+      <nav class="main-nav" aria-label="Navegação principal">
+        <button class="nav-button is-active" type="button" data-view="busca">Busca</button>
+        <button class="nav-button" type="button" data-view="propostas">Propostas</button>
+        <button class="nav-button" type="button" data-view="documentos">Documentos</button>
+        <button class="nav-button" type="button" data-view="perfis">Perfis</button>
+      </nav>
+    </header>
+
+    <main id="conteudo">
+      <section class="view is-active" id="view-busca" aria-labelledby="busca-title">
+        <div class="search-shell">
+          <div class="search-copy">
+            <p class="eyebrow">Reitoria UFRN 2027-2031 · por @uefyerryeni</p>
+            <h2 id="busca-title">Busque uma palavra e veja onde ela aparece nos programas.</h2>
+          </div>
+          <form class="search-form" id="search-form">
+            <label class="sr-only" for="search-input">Buscar nos programas</label>
+            <input id="search-input" name="q" type="search" autocomplete="off" placeholder="Ex.: circular, permanência, orçamento">
+            <button type="submit">Buscar</button>
+          </form>
+          <div class="suggestions" id="suggestions" aria-label="Sugestões de busca"></div>
+          <p class="method-note">A busca é literal e normalizada. As contagens mostram presença textual nos trechos extraídos, não medem prioridade, intensidade, mérito ou viabilidade das propostas. Quando um arquivo reúne conteúdos repetidos, a base textual é deduplicada para evitar dupla contagem. Compare os trechos e abra os PDFs quando precisar de contexto.</p>
+        </div>
+
+        <div class="stats-strip" id="stats-strip"></div>
+        <section class="results-grid" id="results-grid" aria-live="polite"></section>
+      </section>
+
+      <section class="view" id="view-propostas" aria-labelledby="propostas-title">
+        <div class="section-heading">
+          <p class="eyebrow">Comparação técnica</p>
+          <h2 id="propostas-title">Temas encontrados em três, duas ou uma chapa.</h2>
+          <p>Os agrupamentos abaixo são calculados por ocorrência de palavras-chave e trechos associados. Eles indicam presença textual, não avaliam mérito, prioridade, intensidade ou viabilidade. Diferenças de tamanho, formato e vocabulário entre os documentos podem afetar as contagens.</p>
+        </div>
+        <div class="filter-row" role="group" aria-label="Filtrar temas por presença">
+          <button class="filter-button is-active" type="button" data-coverage="all">Todos</button>
+          <button class="filter-button" type="button" data-coverage="3">Nas três</button>
+          <button class="filter-button" type="button" data-coverage="2">Em duas</button>
+          <button class="filter-button" type="button" data-coverage="1">Em uma</button>
+        </div>
+        <div class="topic-board" id="topic-board"></div>
+      </section>
+
+      <section class="view" id="view-documentos" aria-labelledby="documentos-title">
+        <div class="section-heading">
+          <p class="eyebrow">Fonte primária</p>
+          <h2 id="documentos-title">Programas completos para leitura e download.</h2>
+        </div>
+        <div class="document-layout">
+          <div class="document-list" id="document-list"></div>
+          <div class="pdf-panel">
+            <div class="pdf-panel-head">
+              <strong id="pdf-title">Selecione um documento</strong>
+              <a id="pdf-download" download>Baixar PDF</a>
+            </div>
+            <iframe id="pdf-frame" title="Visualizador do programa selecionado"></iframe>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-perfis" aria-labelledby="perfis-title">
+        <div class="section-heading">
+          <p class="eyebrow">Perfis</p>
+          <h2 id="perfis-title">Quem aparece nos programas.</h2>
+          <p>Os textos desta aba usam apenas informações presentes nos PDFs anexados. Links externos, como Currículo Lattes, devem ser adicionados após verificação das URLs oficiais.</p>
+        </div>
+        <div class="profiles-grid" id="profiles-grid"></div>
+      </section>
+    </main>
+
+    <footer class="footer-note">
+      <p>Uma iniciativa do perfil <a href="https://www.instagram.com/uefyerryeni/" target="_blank" rel="noopener noreferrer">@uefyerryeni</a>. Base textual: PDFs das chapas 2 e 3 baixados dos sites e redes sociais das candidaturas em 21/09/2026, por volta do meio-dia; PDF completo da Chapa 1 atualizado em 22/09/2026, após novo envio da candidatura. O PDF público da Chapa 2 reúne carta-programa e dez eixos; para evitar dupla contagem, a busca textual usa uma base deduplicada sem repetição de conteúdo. Método: busca literal normalizada, trechos por página e agrupamento temático por palavras-chave. Os trechos preservam a redação extraída dos PDFs. Nenhuma chapa recebe peso, nota ou ranqueamento.</p>
+    </footer>
+
+    <script src="assets/data.js?v=2026-09-23-layout-results"></script>
+    <script src="assets/app.js?v=2026-09-23-layout-results"></script>
+  </body>
+</html>
