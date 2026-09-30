@@ -3,7 +3,6 @@
   const docs = DATA.documents;
   let currentCoverage = "all";
   let selectedDocId = null;
-  const pdfUrlCache = new Map();
 
   const $ = (selector) => document.querySelector(selector);
   const $$ = (selector) => Array.from(document.querySelectorAll(selector));
@@ -181,59 +180,7 @@
       .join("");
   }
 
-
-  async function getDocumentUrl(doc) {
-    if (!doc.parts || !doc.parts.length) return doc.download;
-    if (pdfUrlCache.has(doc.id)) return pdfUrlCache.get(doc.id);
-
-    const byteChunks = [];
-    for (const part of doc.parts) {
-      const response = await fetch(part);
-      if (!response.ok) throw new Error(`Falha ao carregar ${part}`);
-      const base64 = (await response.text()).trim();
-      const binary = atob(base64);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
-      byteChunks.push(bytes);
-    }
-
-    const url = URL.createObjectURL(new Blob(byteChunks, { type: "application/pdf" }));
-    pdfUrlCache.set(doc.id, url);
-    return url;
-  }
-
-  function showDocumentError(error) {
-    console.error(error);
-    window.alert("Não foi possível abrir este PDF agora. Tente novamente em instantes.");
-  }
-
-  async function openDocumentInNewTab(doc) {
-    const tab = window.open("about:blank", "_blank");
-    try {
-      const url = await getDocumentUrl(doc);
-      if (tab) tab.location.href = url;
-      else window.location.href = url;
-    } catch (error) {
-      if (tab) tab.close();
-      showDocumentError(error);
-    }
-  }
-
-  async function downloadDocument(doc) {
-    try {
-      const url = await getDocumentUrl(doc);
-      const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = doc.download.split("/").pop() || `${doc.id}.pdf`;
-      document.body.appendChild(anchor);
-      anchor.click();
-      anchor.remove();
-    } catch (error) {
-      showDocumentError(error);
-    }
-  }
-
-  async function renderDocuments() {
+  function renderDocuments() {
     $("#document-list").innerHTML = docs
       .map(
         (doc) => `
@@ -244,7 +191,7 @@
             <p>${doc.pages} páginas no PDF${doc.searchPages && doc.searchPages !== doc.pages ? ` · ${doc.searchPages} páginas na base de busca` : ""} · ${Math.round(doc.textLength / 1000)} mil caracteres extraídos</p>
             <div class="doc-actions">
               <a href="${doc.download}" target="_blank" rel="noopener noreferrer" data-open-doc="${doc.id}">Ver PDF</a>
-              <a href="${doc.download}" download data-download-doc="${doc.id}">Baixar</a>
+              <a href="${doc.download}" download>Baixar</a>
             </div>
           </article>
         `
@@ -252,25 +199,11 @@
       .join("");
 
     $$("#document-list [data-open-doc]").forEach((link) => {
-      link.addEventListener("click", async (event) => {
+      link.addEventListener("click", (event) => {
+        if (window.matchMedia("(max-width: 760px)").matches) return;
         event.preventDefault();
-        const doc = docs.find((item) => item.id === link.dataset.openDoc);
-        if (!doc) return;
-        if (window.matchMedia("(max-width: 760px)").matches) {
-          await openDocumentInNewTab(doc);
-          return;
-        }
-        selectedDocId = doc.id;
-        await renderDocuments();
-      });
-    });
-
-    $$("#document-list [data-download-doc]").forEach((link) => {
-      link.addEventListener("click", async (event) => {
-        const doc = docs.find((item) => item.id === link.dataset.downloadDoc);
-        if (!doc || !doc.parts || !doc.parts.length) return;
-        event.preventDefault();
-        await downloadDocument(doc);
+        selectedDocId = link.dataset.openDoc;
+        renderDocuments();
       });
     });
 
@@ -278,22 +211,12 @@
     if (!selected) {
       $("#pdf-title").textContent = "Selecione um documento";
       $("#pdf-download").removeAttribute("href");
-      $("#pdf-download").onclick = null;
       $("#pdf-frame").removeAttribute("src");
       return;
     }
     $("#pdf-title").textContent = `${selected.number}: ${selected.title}`;
-    try {
-      const url = await getDocumentUrl(selected);
-      $("#pdf-frame").src = url;
-      $("#pdf-download").href = url;
-      $("#pdf-download").download = selected.download.split("/").pop() || `${selected.id}.pdf`;
-      $("#pdf-download").onclick = selected.parts && selected.parts.length
-        ? async (event) => { event.preventDefault(); await downloadDocument(selected); }
-        : null;
-    } catch (error) {
-      showDocumentError(error);
-    }
+    $("#pdf-download").href = selected.download;
+    $("#pdf-frame").src = selected.download;
   }
 
   function renderProfiles() {
