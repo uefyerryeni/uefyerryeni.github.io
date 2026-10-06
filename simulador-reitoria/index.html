@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4dd19">
+<title>Simulador da apuração | Observatório Uefy</title>
+<meta name="description" content="Ferramenta educativa em teste para entender a apuração da eleição para a Reitoria da UFRN.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--y:#f4dd19;--k:#000;--paper:#fffbea;--w:#fff;--red:#a9271c;--green:#17663b;--cyan:#16c7c7}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(90deg,rgba(0,0,0,.055) 1px,transparent 1px),linear-gradient(0deg,rgba(0,0,0,.055) 1px,transparent 1px),var(--y);background-size:24px 24px;color:#000;font-family:"Archivo Narrow",Arial,sans-serif;font-size:17px;line-height:1.35}
+button,input{font:inherit;color:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,summary:focus-visible,a:focus-visible{outline:4px solid var(--cyan);outline-offset:3px}
+.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 12px;background:var(--y);border-bottom:4px solid #000}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:#000}.brand img{width:40px;height:40px;border:3px solid #000;border-radius:50%;background:var(--y)}.brand small{display:block;font-size:.65rem;font-weight:700;text-transform:uppercase}.brand strong{display:block;font-size:1.08rem;line-height:1}
+.test{padding:8px 12px;border-bottom:4px solid #000;background:#000;color:#fff;text-align:center;font-weight:700;font-size:.88rem}.test b{color:var(--y);text-transform:uppercase}
+main{padding:10px 8px 40px}.shell{max-width:900px;margin:auto;background:var(--paper);border:4px solid #000;box-shadow:5px 5px 0 #000;padding:14px}
+.intro{padding-bottom:14px;border-bottom:4px solid #000}.intro small{font-weight:700;text-transform:uppercase}.intro h1{font-size:2rem;line-height:.92;margin:3px 0 8px}.intro p{margin:0;font-weight:600}.tag{display:inline-block;margin-top:10px;padding:5px 8px;border:3px solid #000;background:#fff;font-weight:700;text-transform:uppercase;font-size:.72rem;box-shadow:2px 2px 0 #000}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:14px 0 18px}.steps button{min-height:48px;padding:6px 4px;border:3px solid #000;background:#fff;font-weight:700;font-size:.72rem;line-height:1.05}.steps button span{display:block;font-size:.58rem;text-transform:uppercase;margin-bottom:2px}.steps button.on{background:#000;color:var(--y)}.steps button.done{background:var(--y)}
+.panel{display:none}.panel.on{display:block}.head{display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:start;margin-bottom:14px}.n{width:42px;height:42px;display:grid;place-items:center;border:3px solid #000;background:var(--y);font-size:1.25rem;font-weight:700;box-shadow:3px 3px 0 #000}.head h2{margin:0 0 4px;font-size:1.7rem;line-height:.95}.head p{margin:0;font-weight:600}.hint{margin:0 0 14px;padding:9px 10px;border:3px solid #000;background:#fff;font-weight:700}
+.list{display:grid;gap:10px}.card{padding:12px;border:4px solid #000;background:#fff;box-shadow:3px 3px 0 #000}.row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.row strong{font-size:1.15rem}.big{font-size:1.35rem;font-weight:700;white-space:nowrap}.card input[type=range]{width:100%;margin:10px 0 5px;accent-color:#000}.card small{font-weight:600;color:#333}
+.weight .bar{height:17px;margin-top:8px;border:3px solid #000;background:#f1f1ec;overflow:hidden}.weight .bar i{display:block;height:100%;background:var(--y);border-right:3px solid #000}.note{margin-top:14px;padding:10px 12px;border:3px solid #000;background:#000;color:#fff;font-weight:600}.note b{color:var(--y)}
+.vote{border:4px solid #000;background:#fff;box-shadow:3px 3px 0 #000}.vote h3{margin:0;padding:9px 11px;border-bottom:3px solid #000;background:var(--y);font-size:1.2rem}.vote p{margin:0;padding:9px 11px 0;font-weight:600}.fields{margin-top:9px;border-top:3px solid #000}.field{display:grid;grid-template-columns:82px 1fr;gap:8px;align-items:center;padding:9px 10px;border-bottom:3px solid #000}.field:last-child{border-bottom:0}.field label{font-size:.78rem;font-weight:700;text-transform:uppercase}.input{display:flex;align-items:center;border:3px solid #000;background:var(--paper)}.input input{width:100%;min-width:0;border:0;background:transparent;padding:8px;font-size:1.15rem;font-weight:700;outline:0}.input span{padding-right:8px;font-weight:700}.sum{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border-top:3px solid #000;font-weight:700}.sum.ok{background:#e8f4ec;color:var(--green)}.sum.bad{background:#ffe3dd;color:var(--red)}
+.status{margin-bottom:12px;padding:14px;border:4px solid #000;background:#000;color:#fff;box-shadow:4px 4px 0 var(--y)}.status small{display:block;color:var(--y);font-weight:700;text-transform:uppercase}.status strong{display:block;margin-top:4px;font-size:1.65rem;line-height:.95}.score{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:11px 12px;border:4px solid #000;background:#fff;box-shadow:3px 3px 0 #000}.score+ .score{margin-top:9px}.score.lead{background:var(--y)}.score strong{font-size:1.15rem}.score b{font-size:1.3rem}
+details{margin-top:14px}summary{padding:10px 12px;border:3px solid #000;background:#fff;box-shadow:3px 3px 0 #000;font-weight:700;cursor:pointer}.detail{margin-top:9px;padding:10px;border:3px solid #000;background:#fff}.break{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:2px solid #000}.break:last-child{border-bottom:0}.break b{white-space:nowrap}
+.actions{position:sticky;bottom:0;display:flex;gap:8px;margin:18px -14px -14px;padding:11px 14px;background:var(--paper);border-top:3px solid #000;z-index:10}.btn{flex:1;min-height:46px;padding:8px;border:3px solid #000;background:#fff;box-shadow:3px 3px 0 #000;font-weight:700}.btn.primary{background:#000;color:var(--y)}.btn.yellow{background:var(--y)}.btn:disabled{opacity:.45;cursor:not-allowed}.msg{min-height:1.2em;margin:10px 0 0;font-weight:700}.msg.err{color:var(--red)}.msg.ok{color:var(--green)}
+.about{max-width:900px;margin:18px auto 0}.about .detail p{margin:0 0 9px;font-weight:600}.about code{display:block;padding:10px;background:#000;color:#fff;white-space:pre-wrap;font-size:.78rem;line-height:1.45}
+footer{padding:18px 12px 28px;border-top:4px solid #000;background:var(--y);font-weight:700}.foot{max-width:900px;margin:auto}.foot a{color:#000}
+@media(min-width:700px){body{font-size:18px}main{padding:18px 28px 52px}.shell{padding:24px;border-width:5px;box-shadow:7px 7px 0 #000}.intro{display:grid;grid-template-columns:1fr auto;gap:18px}.intro h1{font-size:3rem}.tag{margin-top:0;align-self:start}.steps{gap:8px}.steps button{min-height:58px;padding:8px;font-size:.9rem;text-align:left;box-shadow:3px 3px 0 #000}.steps button span{font-size:.68rem}.head{grid-template-columns:52px 1fr}.n{width:52px;height:52px;font-size:1.5rem;border-width:4px}.head h2{font-size:2.35rem}.list{gap:12px}.field{display:block;border-bottom:0;border-right:3px solid #000}.field:last-child{border-right:0}.fields{display:grid;grid-template-columns:repeat(3,1fr)}.actions{position:static;margin:18px 0 0;padding:14px 0 0;border-top:3px solid #000}.btn{flex:0 1 auto;padding:10px 16px}.top{padding:10px 28px}.test{padding:9px 28px}.brand img{width:46px;height:46px}.brand strong{font-size:1.25rem}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="../"><img src="../uefyerryeni-logo.png" alt=""><span><small>Iniciativa UEFY</small><strong>Observatório Uefy</strong></span></a>
+  <strong>Reitoria UFRN 2027–2031</strong>
+</header>
+<div class="test"><b>Aberto para testes</b> · Esta ferramenta está em desenvolvimento e ainda pode mudar.</div>
+<main>
+<section class="shell">
+  <div class="intro">
+    <div><small>Simulador educativo</small><h1>Entenda a apuração fazendo a conta.</h1><p>Monte um cenário fictício. A ferramenta mostra, passo a passo, como os votos viram pontos.</p></div>
+    <span class="tag">Teste · não é pesquisa eleitoral</span>
+  </div>
+
+  <nav class="steps" aria-label="Etapas">
+    <button class="on" data-step="1"><span>Etapa 1</span>Votos válidos</button>
+    <button data-step="2"><span>Etapa 2</span>Parte da conta</button>
+    <button data-step="3"><span>Etapa 3</span>Divisão dos votos</button>
+    <button data-step="4"><span>Etapa 4</span>Pontos finais</button>
+  </nav>
+
+  <section class="panel on" data-panel="1">
+    <div class="head"><div class="n">1</div><div><h2>De cada 100 aptos, quantos votos válidos foram registrados?</h2><p>A resolução compara os votos válidos de cada grupo com o total de pessoas aptas naquele grupo.</p></div></div>
+    <p class="hint">Para aprender a lógica, imagine que cada grupo tem 100 pessoas aptas. Ajuste os três números.</p>
+    <div class="list" id="valid"></div>
+    <div class="actions"><button class="btn" disabled>Início</button><button class="btn primary" data-go="2">Ver o que isso muda →</button></div>
+  </section>
+
+  <section class="panel" data-panel="2">
+    <div class="head"><div class="n">2</div><div><h2>Quanto cada grupo representa no cálculo?</h2><p>Os três valores anteriores são comparados entre si. Isso define a parcela de docentes, técnicos e estudantes na conta final.</p></div></div>
+    <div class="list" id="weights"></div>
+    <div class="note" id="weightNote"></div>
+    <div class="actions"><button class="btn" data-go="1">← Voltar</button><button class="btn primary" data-go="3">Agora dividir os votos →</button></div>
+  </section>
+
+  <section class="panel" data-panel="3">
+    <div class="head"><div class="n">3</div><div><h2>Como os votos válidos foram divididos?</h2><p>Em cada grupo, distribua 100% dos votos entre as três chapas.</p></div></div>
+    <div class="list" id="votes"></div>
+    <p class="msg" id="voteMsg"></p>
+    <div class="actions"><button class="btn" data-go="2">← Voltar</button><button class="btn primary" id="calc">Calcular os pontos →</button></div>
+  </section>
+
+  <section class="panel" data-panel="4">
+    <div class="head"><div class="n">4</div><div><h2>Quantos pontos cada chapa fez?</h2><p>Agora a ferramenta combina a parcela de cada grupo com a distribuição de votos daquele grupo.</p></div></div>
+    <div class="status"><small>Resultado desta simulação</small><strong id="status">—</strong></div>
+    <div id="scores"></div>
+    <details><summary>Ver de onde vieram os pontos</summary><div class="detail" id="detail"></div></details>
+    <p class="msg" id="shareMsg"></p>
+    <div class="actions"><button class="btn" data-go="3">← Ajustar cenário</button><button class="btn yellow" id="share">Compartilhar cenário</button></div>
+  </section>
+</section>
+
+<section class="about">
+  <details>
+    <summary>O que a resolução diz?</summary>
+    <div class="detail">
+      <p>A Resolução nº 024/2026-CONSUNI usa os votos de cada chapa entre docentes, técnicos e estudantes, os votos válidos de cada grupo e o número de pessoas aptas em cada grupo.</p>
+      <p>Esta página apenas reorganiza a fórmula oficial em passos mais fáceis de acompanhar.</p>
+      <code>Argumento da chapa = (Di/D + Ti/T + Ei/E) × Q × 100
+
+Q = 1 / (DT/D + TT/T + ET/E)</code>
+      <p>Fonte: Resolução nº 024/2026-CONSUNI, Anexo II. Ferramenta independente, em teste e sem vínculo oficial com a UFRN ou com as chapas.</p>
+    </div>
+  </details>
+</section>
+</main>
+<footer><div class="foot"><strong>Observatório Uefy · @uefyerryeni</strong><br><span>Ferramenta educativa em versão de teste.</span></div></footer>
+
+<script>
+(()=>{
+const groups=[["d","Docentes"],["t","Técnicos"],["e","Estudantes"]];
+let s={d:{valid:80,v:[60,25,15]},t:{valid:60,v:[50,30,20]},e:{valid:20,v:[40,35,25]}};
+const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
+const fmt=(n,d=1)=>Number(n).toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d});
+const clamp=(n,a,b)=>Math.min(b,Math.max(a,Number.isFinite(Number(n))?Number(n):0));
+
+function readUrl(){const p=new URLSearchParams(location.search);groups.forEach(([id])=>{if(p.has(id+"v"))s[id].valid=clamp(p.get(id+"v"),0,100);[0,1,2].forEach(i=>{if(p.has(id+(i+1)))s[id].v[i]=clamp(p.get(id+(i+1)),0,100)})})}
+function saveUrl(){const p=new URLSearchParams;groups.forEach(([id])=>{p.set(id+"v",s[id].valid);s[id].v.forEach((x,i)=>p.set(id+(i+1),x))});history.replaceState(null,"",location.pathname+"?"+p)}
+function weights(){const t=groups.reduce((a,[id])=>a+s[id].valid,0);return groups.map(([id])=>t?s[id].valid/t*100:0)}
+function buildValid(){$("#valid").innerHTML=groups.map(([id,n])=>`<article class="card"><div class="row"><strong>${n}</strong><span class="big"><span id="${id}o">${fmt(s[id].valid,0)}</span> de 100</span></div><input id="${id}r" type="range" min="0" max="100" step="1" value="${s[id].valid}"><small><span id="${id}p">${fmt(s[id].valid,0)}</span>% das pessoas aptas geraram voto válido neste cenário.</small></article>`).join("");groups.forEach(([id])=>$("#"+id+"r").addEventListener("input",e=>{s[id].valid=clamp(e.target.value,0,100);$("#"+id+"o").textContent=fmt(s[id].valid,0);$("#"+id+"p").textContent=fmt(s[id].valid,0);renderWeights();renderResult();saveUrl()}))}
+function renderWeights(){const w=weights();$("#weights").innerHTML=groups.map(([id,n],i)=>`<article class="card weight"><div class="row"><strong>${n}</strong><span class="big">${fmt(w[i],1)}%</span></div><div class="bar"><i style="width:${w[i]}%"></i></div></article>`).join("");const total=groups.reduce((a,[id])=>a+s[id].valid,0);$("#weightNote").innerHTML=total?`Os números da etapa 1 somam <b>${fmt(total,0)}</b>. Assim, por exemplo, docentes representam <b>${fmt(s.d.valid,0)} ÷ ${fmt(total,0)} = ${fmt(w[0],1)}%</b> desta conta.`:"Informe algum valor maior que zero na etapa anterior."}
+function buildVotes(){$("#votes").innerHTML=groups.map(([id,n])=>`<article class="vote"><h3>${n}</h3><p>De 100 votos válidos deste grupo:</p><div class="fields">${[0,1,2].map(i=>`<div class="field"><label>Chapa ${i+1}</label><div class="input"><input id="${id}${i}" type="number" min="0" max="100" step="0.1" inputmode="decimal" value="${s[id].v[i]}"><span>%</span></div></div>`).join("")}</div><div class="sum" id="${id}sum"><span>Total informado</span><strong></strong></div></article>`).join("");groups.forEach(([id])=>[0,1,2].forEach(i=>$("#"+id+i).addEventListener("input",e=>{s[id].v[i]=clamp(String(e.target.value).replace(",","."),0,100);renderSums();renderResult();saveUrl()})));renderSums()}
+function errors(){return groups.map(([id,n])=>({id,n,t:s[id].v.reduce((a,b)=>a+b,0)})).filter(x=>Math.abs(x.t-100)>.05)}
+function renderSums(){groups.forEach(([id])=>{const t=s[id].v.reduce((a,b)=>a+b,0),el=$("#"+id+"sum");el.className="sum "+(Math.abs(t-100)<=.05?"ok":"bad");el.querySelector("strong").textContent=fmt(t,1)+"%"})}
+function calc(){const w=weights(),args=[0,0,0],parts=[[],[],[]];for(let c=0;c<3;c++)groups.forEach(([id],i)=>{const p=s[id].v[c]/100*w[i];args[c]+=p;parts[c].push(p)});return{w,args,parts}}
+function resultLabel(a){const r=a.map((v,i)=>({v,i})).sort((x,y)=>y.v-x.v);if(r[0].v>50.00001)return`Chapa ${r[0].i+1} ultrapassa 50 pontos.`;if(Math.abs(r[0].v-r[1].v)<.00001||Math.abs(r[1].v-r[2].v)<.00001)return"Este cenário tem empate relevante.";return`Nenhuma chapa passa de 50 pontos. Chapa ${r[0].i+1} e Chapa ${r[1].i+1} ocupam as duas primeiras posições.`}
+function renderResult(){if(errors().length){$("#status").textContent="Ajuste a divisão dos votos antes de concluir.";$("#scores").innerHTML="";$("#detail").innerHTML="";return}const r=calc(),m=Math.max(...r.args);$("#status").textContent=resultLabel(r.args);$("#scores").innerHTML=r.args.map((v,i)=>`<div class="score ${Math.abs(v-m)<.00001?"lead":""}"><strong>Chapa ${i+1}</strong><b>${fmt(v,2)} pontos</b></div>`).join("");$("#detail").innerHTML=r.args.map((v,c)=>`<div style="margin-bottom:${c<2?"14px":"0"}"><strong>Chapa ${c+1}</strong>${groups.map(([id,n],i)=>`<div class="break"><span>${n}: ${fmt(s[id].v[c],1)}% dos votos × ${fmt(r.w[i],1)}% da conta</span><b>${fmt(r.parts[c][i],2)} pts</b></div>`).join("")}<div class="break"><span><strong>Total</strong></span><b>${fmt(v,2)} pts</b></div></div>`).join("")}
+function go(n){$$(".panel").forEach(p=>p.classList.toggle("on",+p.dataset.panel===n));$$(".steps button").forEach(b=>{const x=+b.dataset.step;b.classList.toggle("on",x===n);b.classList.toggle("done",x<n)});if(n===2)renderWeights();if(n===4)renderResult();scrollTo({top:0,behavior:"smooth"})}
+readUrl();buildValid();buildVotes();renderWeights();renderResult();saveUrl();
+$$("[data-go]").forEach(b=>b.addEventListener("click",()=>go(+b.dataset.go)));$$(".steps button").forEach(b=>b.addEventListener("click",()=>go(+b.dataset.step)));
+$("#calc").addEventListener("click",()=>{const er=errors();if(er.length){$("#voteMsg").textContent=er.map(x=>`${x.n} soma ${fmt(x.t,1)}%, mas precisa fechar em 100%.`).join(" ");$("#voteMsg").className="msg err";return}$("#voteMsg").textContent="";go(4)});
+$("#share").addEventListener("click",async()=>{saveUrl();const text="Simulação educativa da apuração da eleição para a Reitoria da UFRN. "+resultLabel(calc().args);if(navigator.share){try{await navigator.share({title:"Simulador da apuração | Observatório Uefy",text,url:location.href});return}catch(e){if(e.name==="AbortError")return}}try{await navigator.clipboard.writeText(location.href);$("#shareMsg").textContent="Link copiado.";$("#shareMsg").className="msg ok"}catch{$("#shareMsg").textContent="Copie o endereço do navegador.";$("#shareMsg").className="msg err"}});
+})();
+</script>
+</body>
+</html>
