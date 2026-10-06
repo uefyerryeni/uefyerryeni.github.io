@@ -130,16 +130,102 @@ function calc(){const w=weights(),args=[0,0,0],parts=[[],[],[]];for(let c=0;c<3;
 function resultLabel(a){const r=a.map((v,i)=>({v,i})).sort((x,y)=>y.v-x.v);if(r[0].v>50.00001)return`Chapa ${r[0].i+1} ultrapassa 50 pontos.`;if(Math.abs(r[0].v-r[1].v)<.00001||Math.abs(r[1].v-r[2].v)<.00001)return"Este cenário tem empate relevante.";return`Nenhuma chapa passa de 50 pontos. Chapa ${r[0].i+1} e Chapa ${r[1].i+1} ocupam as duas primeiras posições.`}
 function roundedRect(ctx,x,y,w,h,r,fill,stroke,lw=0){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke&&lw){ctx.lineWidth=lw;ctx.strokeStyle=stroke;ctx.stroke()}}
 function fitText(ctx,text,maxWidth,start,min=28){let size=start;while(size>min){ctx.font=`700 ${size}px "Archivo Narrow",Arial,sans-serif`;if(ctx.measureText(text).width<=maxWidth)break;size-=2}return size}
-function drawShareCard(){const c=$("#shareCard");if(!c||errors().length)return;const ctx=c.getContext("2d"),r=calc(),rank=r.args.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v);ctx.clearRect(0,0,c.width,c.height);ctx.fillStyle="#fffbea";ctx.fillRect(0,0,1080,1350);
-ctx.strokeStyle="rgba(0,0,0,.08)";ctx.lineWidth=2;for(let x=0;x<=1080;x+=48){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,1350);ctx.stroke()}for(let y=0;y<=1350;y+=48){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(1080,y);ctx.stroke()}
-ctx.fillStyle="#f4dd19";ctx.fillRect(0,0,1080,178);ctx.fillStyle="#000";ctx.fillRect(58,52,390,70);ctx.fillStyle="#f4dd19";ctx.font='700 34px "Archivo Narrow",Arial,sans-serif';ctx.fillText("OBSERVATÓRIO UEFY",82,98);
-roundedRect(ctx,720,50,300,72,0,"#fff","#000",5);ctx.fillStyle="#000";ctx.font='700 29px "Archivo Narrow",Arial,sans-serif';ctx.fillText("SIMULAÇÃO",772,94);
-ctx.fillStyle="#000";ctx.font='700 24px "Archivo Narrow",Arial,sans-serif';ctx.fillText("NÃO É RESULTADO OFICIAL",58,158);
-ctx.font='700 66px "Archivo Narrow",Arial,sans-serif';ctx.fillText("APURAÇÃO DA REITORIA",58,256);ctx.font='600 31px "Archivo Narrow",Arial,sans-serif';ctx.fillText("Pontos finais deste cenário fictício",58,305);
-let y=365;rank.forEach((row,pos)=>{const lead=pos===0;roundedRect(ctx,58,y,964,150,0,lead?"#f4dd19":"#fff","#000",6);ctx.fillStyle="#000";ctx.font='700 28px "Archivo Narrow",Arial,sans-serif';ctx.fillText(`${pos+1}º`,84,y+55);ctx.font='700 45px "Archivo Narrow",Arial,sans-serif';ctx.fillText(`Chapa ${row.i+1}`,160,y+62);ctx.textAlign="right";ctx.font='700 50px "Archivo Narrow",Arial,sans-serif';ctx.fillText(`${fmt(row.v,2)} pts`,985,y+64);ctx.textAlign="left";ctx.font='600 24px "Archivo Narrow",Arial,sans-serif';ctx.fillText(pos===0?"Maior pontuação neste cenário":"Pontuação simulada",160,y+108);y+=174});
-const label=resultLabel(r.args);roundedRect(ctx,58,900,964,120,0,"#000","#000",0);ctx.fillStyle="#f4dd19";ctx.font='700 25px "Archivo Narrow",Arial,sans-serif';ctx.fillText("O QUE ESTE CENÁRIO INDICA",82,940);const fs=fitText(ctx,label,900,38,28);ctx.font=`700 ${fs}px "Archivo Narrow",Arial,sans-serif`;ctx.fillStyle="#fff";ctx.fillText(label,82,991);
-ctx.fillStyle="#000";ctx.font='700 28px "Archivo Narrow",Arial,sans-serif';ctx.fillText("PARTE DE CADA GRUPO NA CONTA",58,1080);const labels=["Docentes","Técnicos","Estudantes"];let x=58;r.w.forEach((v,i)=>{roundedRect(ctx,x,1110,300,108,0,i===0?"#fff":"#f4dd19","#000",5);ctx.fillStyle="#000";ctx.font='700 25px "Archivo Narrow",Arial,sans-serif';ctx.fillText(labels[i],x+20,1148);ctx.font='700 39px "Archivo Narrow",Arial,sans-serif';ctx.fillText(`${fmt(v,1)}%`,x+20,1196);x+=332});
-ctx.fillStyle="#000";ctx.fillRect(0,1272,1080,78);ctx.fillStyle="#f4dd19";ctx.font='700 25px "Archivo Narrow",Arial,sans-serif';ctx.fillText("Ferramenta educativa em teste · uefyerryeni.github.io/simulador-reitoria",58,1320)}
+
+function cardText(ctx,text,x,y,opts={}){
+  const size=opts.size||32,weight=opts.weight||700,color=opts.color||"#000";
+  const align=opts.align||"left",baseline=opts.baseline||"alphabetic";
+  const family=opts.family||'"Archivo Narrow",Arial,sans-serif';
+  ctx.save();
+  ctx.fillStyle=color;
+  ctx.textAlign=align;
+  ctx.textBaseline=baseline;
+  ctx.font=weight+" "+size+"px "+family;
+  if(opts.maxWidth) ctx.fillText(text,x,y,opts.maxWidth); else ctx.fillText(text,x,y);
+  ctx.restore();
+}
+function cardCenterText(ctx,text,x,y,w,h,opts={}){
+  cardText(ctx,text,x+w/2,y+h/2,Object.assign({},opts,{align:"center",baseline:"middle"}));
+}
+function wrapCardText(ctx,text,x,y,maxWidth,lineHeight,opts={}){
+  const words=String(text).split(/\s+/);
+  let line="",yy=y,lines=[];
+  const weight=opts.weight||700,size=opts.size||32,family=opts.family||'"Archivo Narrow",Arial,sans-serif';
+  ctx.save();ctx.font=weight+" "+size+"px "+family;
+  for(const word of words){
+    const test=line?line+" "+word:word;
+    if(ctx.measureText(test).width>maxWidth && line){lines.push(line);line=word;}
+    else line=test;
+  }
+  if(line) lines.push(line);
+  ctx.restore();
+  lines.forEach((ln,i)=>cardText(ctx,ln,x,yy+i*lineHeight,opts));
+  return lines.length;
+}
+function drawShareCard(){
+  const c=$("#shareCard");
+  if(!c||errors().length)return;
+  const ctx=c.getContext("2d"),r=calc(),rank=r.args.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v);
+
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.fillStyle="#fffbea";ctx.fillRect(0,0,1080,1350);
+
+  ctx.save();
+  ctx.strokeStyle="rgba(0,0,0,.055)";ctx.lineWidth=1.5;
+  for(let x=0;x<=1080;x+=48){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,1350);ctx.stroke()}
+  for(let y=0;y<=1350;y+=48){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(1080,y);ctx.stroke()}
+  ctx.restore();
+
+  const L=58,W=964;
+
+  cardText(ctx,"INICIATIVA UEFY",L,56,{size:22,weight:700});
+  cardText(ctx,"OBSERVATÓRIO UEFY",L,96,{size:38,weight:700});
+  ctx.fillStyle="#000";ctx.fillRect(L,116,286,5);
+
+  roundedRect(ctx,L,148,360,78,0,"#f4dd19","#000",5);
+  cardCenterText(ctx,"SIMULAÇÃO",L,148,360,78,{size:39,weight:700});
+
+  roundedRect(ctx,438,148,584,78,0,"#fff","#000",5);
+  cardCenterText(ctx,"NÃO É RESULTADO OFICIAL",438,148,584,78,{size:28,weight:700});
+
+  cardText(ctx,"RESULTADO DESTA SIMULAÇÃO",L,302,{size:66,weight:700});
+  ctx.fillStyle="#f4dd19";ctx.fillRect(L,320,555,11);
+  cardText(ctx,"Cenário fictício para entender como os votos viram pontos.",L,374,{size:30,weight:600});
+  cardText(ctx,"Os números abaixo são apenas uma simulação.",L,410,{size:26,weight:600});
+
+  let y=452;
+  rank.forEach((row,pos)=>{
+    const lead=pos===0,rowH=142;
+    roundedRect(ctx,L,y,W,rowH,0,lead?"#f4dd19":"#fff","#000",5);
+    ctx.fillStyle="#000";ctx.fillRect(L,y,126,rowH);
+    cardCenterText(ctx,String(pos+1)+"º",L,y,126,rowH,{size:50,weight:700,color:lead?"#f4dd19":"#fff"});
+    cardText(ctx,"CHAPA "+String(row.i+1),L+160,y+57,{size:49,weight:700});
+    cardText(ctx,pos===0?"Maior pontuação neste cenário":"Pontuação simulada",L+160,y+103,{size:23,weight:600});
+    ctx.fillStyle="#000";ctx.fillRect(670,y+24,4,rowH-48);
+    cardText(ctx,fmt(row.v,2),958,y+72,{size:58,weight:700,align:"right"});
+    cardText(ctx,"pontos",958,y+106,{size:24,weight:700,align:"right"});
+    y+=158;
+  });
+
+  const boxY=932;
+  roundedRect(ctx,L,boxY,W,152,0,"#fff","#000",5);
+  ctx.fillStyle="#f4dd19";ctx.fillRect(L,boxY,W,54);
+  cardText(ctx,"O QUE ESTE CENÁRIO INDICA",L+22,boxY+37,{size:28,weight:700});
+  wrapCardText(ctx,resultLabel(r.args),L+22,boxY+92,W-44,34,{size:29,weight:700});
+
+  cardText(ctx,"PARTE DE CADA GRUPO NA CONTA",L,1134,{size:31,weight:700});
+  const labels=["Docentes","Técnicos","Estudantes"];
+  const bx=[L,386,714];
+  r.w.forEach((v,i)=>{
+    roundedRect(ctx,bx[i],1160,308,112,0,"#fff","#000",5);
+    cardText(ctx,labels[i],bx[i]+18,1195,{size:25,weight:700});
+    ctx.fillStyle="#f4dd19";ctx.fillRect(bx[i]+3,1211,302,58);
+    cardText(ctx,fmt(v,1)+"%",bx[i]+18,1255,{size:43,weight:700});
+  });
+
+  ctx.fillStyle="#000";ctx.fillRect(0,1300,1080,50);
+  cardText(ctx,"Ferramenta educativa em teste",L,1333,{size:22,weight:700,color:"#f4dd19"});
+  cardText(ctx,"uefyerryeni.github.io/simulador-reitoria",1022,1333,{size:22,weight:700,color:"#fff",align:"right"});
+}
 async function renderCardWhenReady(){try{if(document.fonts&&document.fonts.ready)await document.fonts.ready}catch{}drawShareCard()}
 function renderResult(){if(errors().length){$("#status").textContent="Ajuste a divisão dos votos antes de concluir.";$("#scores").innerHTML="";$("#detail").innerHTML="";const c=$("#shareCard");if(c)c.getContext("2d").clearRect(0,0,c.width,c.height);return}const r=calc(),m=Math.max(...r.args);$("#status").textContent=resultLabel(r.args);$("#scores").innerHTML=r.args.map((v,i)=>`<div class="score ${Math.abs(v-m)<.00001?"lead":""}"><strong>Chapa ${i+1}</strong><b>${fmt(v,2)} pontos</b></div>`).join("");$("#detail").innerHTML=r.args.map((v,c)=>`<div style="margin-bottom:${c<2?"14px":"0"}"><strong>Chapa ${c+1}</strong>${groups.map(([id,n],i)=>`<div class="break"><span>${n}: ${fmt(s[id].v[c],1)}% dos votos × ${fmt(r.w[i],1)}% da conta</span><b>${fmt(r.parts[c][i],2)} pts</b></div>`).join("")}<div class="break"><span><strong>Total</strong></span><b>${fmt(v,2)} pts</b></div></div>`).join("");renderCardWhenReady()}
 function go(n){$$(".panel").forEach(p=>p.classList.toggle("on",+p.dataset.panel===n));$$(".steps button").forEach(b=>{const x=+b.dataset.step;b.classList.toggle("on",x===n);b.classList.toggle("done",x<n)});if(n===2)renderWeights();if(n===4)renderResult();scrollTo({top:0,behavior:"smooth"})}
