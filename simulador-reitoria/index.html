@@ -54,7 +54,7 @@ footer{padding:18px 12px 28px;border-top:4px solid #000;background:var(--y);font
 
   <section class="panel on" data-panel="1">
     <div class="head"><div class="n">1</div><div><h2>De cada 100 aptos, quantos votos válidos foram registrados?</h2><p>A resolução compara os votos válidos de cada grupo com o total de pessoas aptas naquele grupo.</p></div></div>
-    <p class="hint">Para aprender a lógica, imagine que cada grupo tem 100 pessoas aptas. Ajuste os três números.</p>
+    <p class="hint">Ajuste o percentual de votos válidos em cada segmento. O simulador usa o eleitorado apto informado pela STI/UFRN em 08/10/2026: 2.397 docentes, 2.864 técnicos e 40.071 estudantes (45.332 no total). <strong>Dados provisórios.</strong></p>
     <div class="list" id="valid"></div>
     <div class="actions"><button class="btn" disabled>Início</button><button class="btn primary" data-go="2">Ver o que isso muda →</button></div>
   </section>
@@ -99,11 +99,11 @@ footer{padding:18px 12px 28px;border-top:4px solid #000;background:var(--y);font
     <summary>O que a resolução diz?</summary>
     <div class="detail">
       <p>A Resolução nº 024/2026-CONSUNI usa os votos de cada chapa entre docentes, técnicos e estudantes, os votos válidos de cada grupo e o número de pessoas aptas em cada grupo.</p>
-      <p>Esta página apenas reorganiza a fórmula oficial em passos mais fáceis de acompanhar.</p>
+      <p>Esta página reorganiza a fórmula oficial em passos mais fáceis de acompanhar. Cada percentual de votos válidos é aplicado ao total de eleitores aptos do segmento correspondente. Na fórmula, os totais D, T e E são os denominadores oficiais provisórios. O cálculo mantém valores não arredondados; as quantidades de votos exibidas são aproximações didáticas.</p>
       <code>Argumento da chapa = (Di/D + Ti/T + Ei/E) × Q × 100
 
 Q = 1 / (DT/D + TT/T + ET/E)</code>
-      <p>Fonte: Resolução nº 024/2026-CONSUNI, Anexo II. Ferramenta independente, em teste e sem vínculo oficial com a UFRN ou com as chapas.</p>
+      <p>Fontes: Resolução nº 024/2026-CONSUNI, Anexo II; quantitativos de eleitores aptos fornecidos pela STI/UFRN à Comissão Organizadora, chamado nº 481596, referência 08/10/2026. Esses dados não são definitivos para o primeiro turno. Ferramenta independente, em teste e sem vínculo oficial com a UFRN ou com as chapas.</p>
     </div>
   </details>
 </section>
@@ -113,6 +113,8 @@ Q = 1 / (DT/D + TT/T + ET/E)</code>
 <script>
 (()=>{
 const groups=[["d","Docentes"],["t","Técnicos"],["e","Estudantes"]];
+const apt={d:2397,t:2864,e:40071}; // STI/UFRN, 08/10/2026, provisório
+const aptFmt=n=>Number(n).toLocaleString("pt-BR",{maximumFractionDigits:0});
 let s={d:{valid:80,v:[60,25,15]},t:{valid:60,v:[50,30,20]},e:{valid:20,v:[40,35,25]}};
 const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
 const fmt=(n,d=1)=>Number(n).toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -120,9 +122,12 @@ const clamp=(n,a,b)=>Math.min(b,Math.max(a,Number.isFinite(Number(n))?Number(n):
 
 function readUrl(){const p=new URLSearchParams(location.search);groups.forEach(([id])=>{if(p.has(id+"v"))s[id].valid=clamp(p.get(id+"v"),0,100);[0,1,2].forEach(i=>{if(p.has(id+(i+1)))s[id].v[i]=clamp(p.get(id+(i+1)),0,100)})})}
 function saveUrl(){const p=new URLSearchParams;groups.forEach(([id])=>{p.set(id+"v",s[id].valid);s[id].v.forEach((x,i)=>p.set(id+(i+1),x))});history.replaceState(null,"",location.pathname+"?"+p)}
-function weights(){const t=groups.reduce((a,[id])=>a+s[id].valid,0);return groups.map(([id])=>t?s[id].valid/t*100:0)}
-function buildValid(){$("#valid").innerHTML=groups.map(([id,n])=>`<article class="card"><div class="row"><strong>${n}</strong><span class="big"><span id="${id}o">${fmt(s[id].valid,0)}</span> de 100</span></div><input id="${id}r" type="range" min="0" max="100" step="1" value="${s[id].valid}"><small><span id="${id}p">${fmt(s[id].valid,0)}</span>% das pessoas aptas geraram voto válido neste cenário.</small></article>`).join("");groups.forEach(([id])=>$("#"+id+"r").addEventListener("input",e=>{s[id].valid=clamp(e.target.value,0,100);$("#"+id+"o").textContent=fmt(s[id].valid,0);$("#"+id+"p").textContent=fmt(s[id].valid,0);renderWeights();renderResult();saveUrl()}))}
-function renderWeights(){const w=weights();$("#weights").innerHTML=groups.map(([id,n],i)=>`<article class="card weight"><div class="row"><strong>${n}</strong><span class="big">${fmt(w[i],1)}%</span></div><div class="bar"><i style="width:${w[i]}%"></i></div></article>`).join("");const total=groups.reduce((a,[id])=>a+s[id].valid,0);$("#weightNote").innerHTML=total?`Os números da etapa 1 somam <b>${fmt(total,0)}</b>. Assim, por exemplo, docentes representam <b>${fmt(s.d.valid,0)} ÷ ${fmt(total,0)} = ${fmt(w[0],1)}%</b> desta conta.`:"Informe algum valor maior que zero na etapa anterior."}
+function weights(){const normalized=groups.map(([id])=>(apt[id]*s[id].valid/100)/apt[id]);const t=normalized.reduce((a,b)=>a+b,0);return groups.map((_,i)=>t?normalized[i]/t*100:0)}
+function buildValid(){
+  $("#valid").innerHTML=groups.map(([id,n])=>`<article class="card"><div class="row"><strong>${n}</strong><span class="big"><span id="${id}o">${fmt(s[id].valid,0)}</span>%</span></div><div><small>Eleitores aptos: <strong>${aptFmt(apt[id])}</strong> · Votos válidos estimados: <strong id="${id}count">${aptFmt(apt[id]*s[id].valid/100)}</strong></small></div><input id="${id}r" type="range" min="0" max="100" step="1" value="${s[id].valid}" aria-label="Percentual de votos válidos: ${n}"><small><span id="${id}p">${fmt(s[id].valid,0)}</span>% das pessoas aptas geraram voto válido neste cenário fictício.</small></article>`).join("");
+  groups.forEach(([id])=>$("#"+id+"r").addEventListener("input",e=>{s[id].valid=clamp(e.target.value,0,100);$("#"+id+"o").textContent=fmt(s[id].valid,0);$("#"+id+"p").textContent=fmt(s[id].valid,0);$("#"+id+"count").textContent=aptFmt(apt[id]*s[id].valid/100);renderWeights();renderResult();saveUrl()}))
+}
+function renderWeights(){const w=weights();$("#weights").innerHTML=groups.map(([id,n],i)=>`<article class="card weight"><div class="row"><strong>${n}</strong><span class="big">${fmt(w[i],1)}%</span></div><div class="bar"><i style="width:${w[i]}%"></i></div></article>`).join("");const total=groups.reduce((a,[id])=>a+s[id].valid,0);$("#weightNote").innerHTML=total?`Com os eleitores aptos oficiais provisórios, cada grupo contribui pela razão <b>votos válidos ÷ eleitores aptos</b>. Exemplo dos docentes: <b>(${fmt(apt.d*s.d.valid/100,2)} ÷ ${aptFmt(apt.d)})</b>. As três razões são normalizadas: docentes representam <b>${fmt(w[0],1)}%</b> da conta neste cenário. O tamanho do eleitorado não equivale diretamente ao peso da votação.`:"Informe algum valor maior que zero na etapa anterior."}
 function buildVotes(){$("#votes").innerHTML=groups.map(([id,n])=>`<article class="vote"><h3>${n}</h3><p>De 100 votos válidos deste grupo:</p><div class="fields">${[0,1,2].map(i=>`<div class="field"><label>Chapa ${i+1}</label><div class="input"><input id="${id}${i}" type="number" min="0" max="100" step="0.1" inputmode="decimal" value="${s[id].v[i]}"><span>%</span></div></div>`).join("")}</div><div class="sum" id="${id}sum"><span>Total informado</span><strong></strong></div></article>`).join("");groups.forEach(([id])=>[0,1,2].forEach(i=>$("#"+id+i).addEventListener("input",e=>{s[id].v[i]=clamp(String(e.target.value).replace(",","."),0,100);renderSums();renderResult();saveUrl()})));renderSums()}
 function errors(){return groups.map(([id,n])=>({id,n,t:s[id].v.reduce((a,b)=>a+b,0)})).filter(x=>Math.abs(x.t-100)>.05)}
 function renderSums(){groups.forEach(([id])=>{const t=s[id].v.reduce((a,b)=>a+b,0),el=$("#"+id+"sum");el.className="sum "+(Math.abs(t-100)<=.05?"ok":"bad");el.querySelector("strong").textContent=fmt(t,1)+"%"})}
@@ -223,7 +228,7 @@ function drawShareCard(){
   });
 
   ctx.fillStyle="#000";ctx.fillRect(0,1300,1080,50);
-  cardText(ctx,"Ferramenta educativa em teste",L,1333,{size:22,weight:700,color:"#f4dd19"});
+  cardText(ctx,"Aptos STI 08/10/2026 · provisórios",L,1333,{size:19,weight:700,color:"#f4dd19"});
   cardText(ctx,"uefyerryeni.github.io/simulador-reitoria",1022,1333,{size:22,weight:700,color:"#fff",align:"right"});
 }
 async function renderCardWhenReady(){try{if(document.fonts&&document.fonts.ready)await document.fonts.ready}catch{}drawShareCard()}
