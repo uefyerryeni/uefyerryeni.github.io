@@ -166,6 +166,31 @@ h3 {
   box-shadow: 4px 4px 0 var(--black);
 }
 
+.simulator-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 8px 14px;
+  border: 3px solid var(--black);
+  background: var(--black);
+  color: var(--yellow);
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 4px 4px 0 var(--white);
+}
+
+.simulator-link:hover {
+  background: var(--paper);
+  color: var(--black);
+  box-shadow: 4px 4px 0 var(--black);
+}
+
+.simulator-link:focus-visible {
+  outline: 4px solid var(--cyan);
+  outline-offset: 3px;
+}
+
 .nav-button.is-active,
 .filter-button.is-active,
 .suggestions button:hover,
@@ -589,7 +614,7 @@ main {
     width: 100%;
   }
 
-  .nav-button {
+  .nav-button, .simulator-link {
     flex: 1 1 140px;
   }
 
