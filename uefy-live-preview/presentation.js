@@ -1,6 +1,7 @@
 export const DEFAULT_COMMENT_SECONDS=60;
 export const PARTICIPATION_HASHTAG='#DebateReitoriaUFRN';
 export function slideDurationMs(slide){
+ if(slide?.type==='video')return Math.max(3000,(slide.clip.durationSeconds+1)*1000);
  return slide?.type==='photo'?10000:Math.max(9000,Array.from(slide?.text||'').length/11*1000);
 }
 export function presentationAt(mode,slides,startedAt,minimumSeconds=DEFAULT_COMMENT_SECONDS,now=Date.now()){

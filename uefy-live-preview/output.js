@@ -1,5 +1,5 @@
 import {presentationAt,slideDurationMs,DEFAULT_COMMENT_SECONDS} from './presentation.js';
-const openState=()=>{};const api=()=>Promise.resolve({});
+const openState=()=>{};const api=async()=>({});
 const params=new URLSearchParams(location.search);
 const demo=true;params.set('crop','1');if(!params.has('clean'))params.set('sim','1');
 const preview=params.has('preview')||demo;
@@ -58,22 +58,43 @@ function makeSlides(){
  const photos=state.comment?.media||[],textParts=state.comment?.text?.trim()?parts:[],out=[];
  for(let i=0;i<Math.max(textParts.length,photos.length);i++){
   if(textParts[i])out.push({type:'text',text:textParts[i]});
-  if(photos[i])out.push({type:'photo',photo:photos[i],number:i+1,total:photos.length});
+  if(photos[i])out.push(photos[i].type==='video'?{type:'video',clip:photos[i],number:i+1,total:photos.length}:{type:'photo',photo:photos[i],number:i+1,total:photos.length});
  }
  return out;
+}
+let postClipVideo=null;
+function stopPostVideo(){
+ const v=postClipVideo;if(!v)return;if(!v.paused)v.pause();v.muted=true;v.volume=0;
+}
+function playPostVideo(){
+ const v=postClipVideo;if(!v||$('post-video-frame').hidden||!state)return;
+ v.defaultMuted=true;v.muted=true;v.volume=0;
+ const view=presentationAt(state.mode,slides,state.commentStartedAt||sessionAnchor,state.commentDurationSeconds||DEFAULT_COMMENT_SECONDS,Date.now());
+ if(view.phase!=='comment'||slides[view.index]?.type!=='video')return;
+ if(v.readyState>=1&&Number.isFinite(v.duration)){
+  const target=Math.max(0,Math.min((Date.now()-view.slideStart)/1000,Math.max(0,v.duration-.1)));
+  if(Math.abs(v.currentTime-target)>.5)v.currentTime=target;
+ }
+ v.play().catch(()=>{if(!$('post-video-frame').hidden){$('photo-error').textContent='Não foi possível reproduzir o vídeo. O debate continua.';$('photo-error').hidden=false;}});
 }
 function page(){
  if(!state||state.mode!=='comment')return;
  const slide=slides[partIndex];if(!slide)return;
- const photo=slide.type==='photo';$('comment-text').hidden=photo;$('post-media').hidden=!photo;
- if(photo){
-  $('photo-error').hidden=true;$('post-image').style.visibility='visible';
-  $('post-image').alt=slide.photo.alt;$('post-image').src=slide.photo.url;
-  $('photo-position').textContent='Foto '+slide.number+' / '+slide.total;
- }else $('comment-text').textContent=slide.text;
+ const attachment=slide.type==='photo'||slide.type==='video',video=slide.type==='video';
+ $('comment-text').hidden=attachment;$('post-media').hidden=!attachment;$('post-image').hidden=video;$('post-video-frame').hidden=!video;
+ if(attachment){
+  $('photo-error').hidden=true;
+  if(video){
+   const clip=slide.clip,v=postClipVideo;if(!v)return;v.defaultMuted=true;v.muted=true;v.volume=0;v.poster=clip.poster||'';
+   if(v.getAttribute('src')!==clip.url){v.src=clip.url;v.load();}else playPostVideo();
+   $('photo-position').textContent='Vídeo sem som · áudio do debate';
+  }else{
+   stopPostVideo();$('post-image').style.visibility='visible';$('post-image').alt=slide.photo.alt;$('post-image').src=slide.photo.url;
+   $('photo-position').textContent='Foto '+slide.number+' / '+slide.total;
+  }
+ }else{stopPostVideo();$('comment-text').textContent=slide.text;}
  $('pagination').textContent=slides.length>1?(partIndex+1)+' / '+slides.length:'';
- pageDuration=slideDurationMs(slide);
- pageStarted=Date.now();rotateAt=pageStarted+pageDuration;
+ pageDuration=slideDurationMs(slide);pageStarted=Date.now();rotateAt=pageStarted+pageDuration;
 }
 function renderAuthor(comment){
  let handle='Uefyerryeni';try{handle=new URL(comment?.url).pathname.split('/')[1]||handle;}catch{}
@@ -88,9 +109,9 @@ function tickPresentation(){
  const view=presentationAt(state.mode,slides,state.commentStartedAt||sessionAnchor,state.commentDurationSeconds||DEFAULT_COMMENT_SECONDS,Date.now()),onair=view.phase==='comment';
  $('post').style.display=onair?'grid':'none';$('participation-card').style.display=view.phase==='participation'?'flex':'none';$('notice').style.display=view.phase==='wait'?'block':'none';
  if(onair){
-  if(presentationPhase!==view.phase||partIndex!==view.index){partIndex=view.index;page();renderAuthor(state.comment);}
+  if(presentationPhase!==view.phase||partIndex!==view.index||pageStarted!==view.slideStart){partIndex=view.index;page();renderAuthor(state.comment);}
   pageStarted=view.slideStart;pageDuration=view.slideDuration;
- }else{$('kind').textContent=view.phase==='participation'?'PARTICIPE PELO X':'ACOMPANHAMENTO';$('pagination').textContent='';}
+ }else{stopPostVideo();$('kind').textContent=view.phase==='participation'?'PARTICIPE PELO X':'ACOMPANHAMENTO';$('pagination').textContent='';}
  presentationPhase=view.phase;
  if(preview&&parent!==window){
   const message={type:'uefy-display-status',phase:view.phase,remainingSeconds:view.remainingSeconds,expiresAt:view.expiresAt||0,revision:state.revision};
@@ -98,7 +119,7 @@ function tickPresentation(){
  }
 }
 
-function render(next){const previous=state;state=next;document.body.classList.toggle('overlay',state.source==='external');$('badge').textContent=state.mode==='wait'?'EM ESPERA':state.source==='test'?'TESTE TÉCNICO':'AO VIVO';$('kind').textContent=state.mode==='comment'?'COMENTÁRIO DA UEFY / X':'ACOMPANHAMENTO';$('post').style.display=state.mode==='comment'?'grid':'none';$('notice').style.display=state.mode==='comment'?'none':'block';const key=JSON.stringify([state.comment,state.commentStartedAt||0]);if(key!==commentKey||previous?.mode!==state.mode){commentKey=key;sessionAnchor=Date.now();$('comment-text').hidden=false;$('post-media').hidden=true;parts=makePages(state.comment?.text||'');slides=makeSlides();for(const photo of state.comment?.media||[]){const preloaded=new Image();preloaded.src=photo.url;}partIndex=0;page();}if(state.comment){renderAuthor(state.comment);$('post-reference').textContent=state.comment.reference.length>20?'Publicado no X':state.comment.reference;$('post-reference').title=state.comment.reference;$('post-link').textContent='Ver no X ↗';$('post-link').title=state.comment.url;}if(state.mode!=='comment')$('pagination').textContent='';loadPlayer();if(previous?.playing!==state.playing||lastCommand!==state.command){lastCommand=state.command;playing(true);}sound();renderCover();tickPresentation();}
+function render(next){const previous=state;state=next;document.body.classList.toggle('overlay',state.source==='external');$('badge').textContent=state.mode==='wait'?'EM ESPERA':state.source==='test'?'TESTE TÉCNICO':'AO VIVO';$('kind').textContent=state.mode==='comment'?'COMENTÁRIO DA UEFY / X':'ACOMPANHAMENTO';$('post').style.display=state.mode==='comment'?'grid':'none';$('notice').style.display=state.mode==='comment'?'none':'block';const key=JSON.stringify([state.comment,state.commentStartedAt||0]);if(key!==commentKey||previous?.mode!==state.mode){commentKey=key;sessionAnchor=Date.now();$('comment-text').hidden=false;$('post-media').hidden=true;parts=makePages(state.comment?.text||'');slides=makeSlides();for(const photo of state.comment?.media||[]){if(photo.type==='photo'){const preloaded=new Image();preloaded.src=photo.url;}}partIndex=0;page();}if(state.comment){renderAuthor(state.comment);$('post-reference').textContent=state.comment.reference.length>20?'Publicado no X':state.comment.reference;$('post-reference').title=state.comment.reference;$('post-link').textContent='Ver no X ↗';$('post-link').title=state.comment.url;}if(state.mode!=='comment')$('pagination').textContent='';loadPlayer();if(previous?.playing!==state.playing||lastCommand!==state.command){lastCommand=state.command;playing(true);}sound();renderCover();tickPresentation();}
 media.addEventListener('playing',()=>{status='Mídia autorizada reproduzindo';});media.addEventListener('error',()=>{error='Formato ou endereço de mídia indisponível';status=error;renderCover();});
 if(!demo)openState(render,()=>{status='Conexão com o painel interrompida; mantendo o último conteúdo';});
 if(!preview){window.onYouTubeIframeAPIReady=()=>{identity='';loadPlayer();};const s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';document.head.append(s);}
@@ -120,4 +141,11 @@ if(demo){
  render({revision:0,source:'youtube',videoId:'M7lc1UVf-VE',mediaUrl:'',mode:params.has('invite')?'follow':'comment',volume:0,muted:true,playing:false,command:0,comment:{text:'A universidade precisa de propostas que possam ser acompanhadas pela comunidade. No debate da Reitoria da UFRN, vamos observar os compromissos com a permanência estudantil, a pesquisa e as condições de trabalho. Publicações longas continuam nas próximas páginas, com tempo para ler e sem diminuir demais as letras.',reference:'Prévia de demonstração',url:'https://x.com/Uefyerryeni/status/1'}});
 }
 
-$('post-image').onerror=()=>{$('post-image').style.visibility='hidden';$('photo-error').hidden=false;};$('post-image').onload=()=>{$('post-image').style.visibility='visible';$('photo-error').hidden=true;};
+$('post-image').onerror=()=>{if(!$('post-video-frame').hidden)return;$('post-image').style.visibility='hidden';$('photo-error').hidden=false;};$('post-image').onload=()=>{if(!$('post-video-frame').hidden)return;$('post-image').style.visibility='visible';$('photo-error').hidden=true;};
+
+function initializePostClip(){
+ const v=$('post-video-frame').contentDocument?.getElementById('post-video');if(!v||v===postClipVideo)return;postClipVideo=v;v.defaultMuted=true;v.muted=true;v.volume=0;
+ v.onloadedmetadata=playPostVideo;v.onerror=()=>{if(!$('post-video-frame').hidden){$('photo-error').textContent='Vídeo indisponível. O debate continua.';$('photo-error').hidden=false;}};v.onvolumechange=()=>{if(!v.muted)v.muted=true;if(v.volume!==0)v.volume=0;};
+ if(state?.mode==='comment'){page();tickPresentation();}
+}
+$('post-video-frame').addEventListener('load',initializePostClip);initializePostClip();
