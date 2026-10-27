@@ -85,7 +85,7 @@ body.editing #editor{display:block}
 <section id="editor" role="dialog" aria-modal="true" aria-label="Controle UEFY LIVE">
 <div class="editorbox">
 <h2>CONTROLE DA UEFY LIVE</h2>
-<p>Este editor roda dentro da fonte Navegador do OBS. Para acessar, clique com o botão direito na fonte → <strong>Interagir</strong> e pressione <strong>F2</strong>, ou clique no canto superior direito da imagem.</p>
+<p>Este editor roda dentro da fonte Navegador do OBS. Para acessar, clique com o botão direito na fonte → <strong>Interagir</strong> e pressione <strong>F2</strong>, ou clique no canto superior direito da imagem.</p><p>Se você já cadastrou o link do vídeo no painel principal, use o botão <strong>Copiar link da fonte OBS</strong> e cole esse endereço nas propriedades da fonte Navegador. O vídeo será levado junto com o link. Se não aparecer, confira se o YouTube permite incorporação.</p>
 <label for="youtube">Link da transmissão do YouTube</label>
 <input id="youtube" type="url" placeholder="https://www.youtube.com/watch?v=…">
 <p>O player começa sem som. Para ouvi-lo, marque “Controlar áudio pelo OBS” nas propriedades da fonte e verifique a disponibilidade de áudio no player.</p>
@@ -105,13 +105,18 @@ const DEFAULT={youtube:'',mode:'aguarde',message:'Acompanhe a transmissão. Os c
 const KEY='uefy-obs-source-v1';
 function getState(){try{return {...DEFAULT,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch{return {...DEFAULT}}}
 let state=getState(),currentVideoId=null;
+// Aceita o link da live enviado pelo painel principal como parâmetro da fonte OBS.
+const linkedVideo=new URLSearchParams(location.search).get('youtube');
+if(linkedVideo&&/^[A-Za-z0-9_-]{11}$/.test(linkedVideo)){
+ state.youtube='https://www.youtube.com/watch?v='+linkedVideo;
+}
 const $=id=>document.getElementById(id);
 const escapeHtml=v=>String(v||'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const html=(message)=>escapeHtml(message);
 function ytId(raw){try{let u=new URL(raw.trim());let h=u.hostname.toLowerCase().replace(/^(www\.|m\.)/,'');let path=u.pathname.split('/').filter(Boolean);let id='';if(h==='youtu.be')id=path[0]||'';else if(['youtube.com','youtube-nocookie.com'].includes(h)){if(path[0]==='watch')id=u.searchParams.get('v')||'';else if(['live','embed','shorts'].includes(path[0]))id=path[1]||'';}return /^[\w-]{11}$/.test(id)?id:''}catch{return ''}}
 function render(){
 const id=ytId(state.youtube);
-if(id!==currentVideoId){currentVideoId=id;$('video').innerHTML=id?`<iframe title="Sinal de vídeo do YouTube" src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&controls=1&rel=0" allow="autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen></iframe>`:`<div class="video-fallback"><span class="mini">SINAL DA TV UNIVERSITÁRIA</span><div class="huge">DEBATE<br>UFRN</div><small>Configure o vídeo com F2 → Interagir no OBS</small></div>`}
+if(id!==currentVideoId){currentVideoId=id;$('video').innerHTML=id?`<iframe title="Sinal de vídeo do YouTube" src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&controls=1&rel=0" allow="autoplay;encrypted-media;picture-in-picture;fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`:`<div class="video-fallback"><span class="mini">SINAL DA TV UNIVERSITÁRIA</span><div class="huge">DEBATE<br>UFRN</div><small>Configure o vídeo com F2 → Interagir no OBS</small></div>`}
 const labels={aguarde:'ACOMPANHAMENTO',comentario:'PUBLICAÇÃO DA UEFY NO X',aviso:'AVISO EDITORIAL',enquete:'ENQUETE NOS STORIES'};$('kind').textContent=labels[state.mode]||labels.aguarde;
 let cls=state.message.length>570?'longest':state.message.length>370?'long':state.message.length>170?'medium':'';
 if(state.mode==='comentario'){
