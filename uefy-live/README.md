@@ -3,14 +3,14 @@
 Central gratuita para Windows + OBS. Não requer API do X, banco de dados ou assinatura.
 
 ## Iniciar
-1. Na pasta entregue UEFY-LIVE, abra **Iniciar.vbs**. Ele inicia a central de forma oculta e abre o painel. O Node.js já disponível neste computador é usado; nada é instalado.
+1. Na pasta entregue UEFY-LIVE, abra **Iniciar.vbs**. Ele inicia a central de forma oculta e abre o painel. O iniciador usa diretamente o Python leve já disponível neste computador, com alternativa em Node.js; nada é instalado. Não depende de PowerShell.
 2. Painel: http://127.0.0.1:17831/painel.html
 3. Fonte Navegador: http://127.0.0.1:17831/obs.html — 1080 × 1920, 30 FPS, controlar áudio via OBS. Não desligar fonte quando invisível nem atualizar ao ativar cena.
 4. Cole o YouTube no painel, carregue e confirme “YouTube reproduzindo”. Cole a incorporação do X, importe, confira e exiba. Retirar comentário e Tela de espera são controles separados. A espera silencia o áudio, mantendo o player carregado.
 
 O painel pode ser adicionado em OBS → Painéis → Painéis de navegador personalizados. Assim toda a operação acontece dentro do OBS. Fechar o Brave não interrompe a fonte ou a central.
 
-Para iniciar por terminal: `node server.mjs` (Node.js 20+). Para encerrar, finalize somente o processo Node da central; reiniciar o computador também o encerra. Nada é instalado na inicialização do Windows. Mantenha a pasta no lugar.
+Para iniciar por terminal: `python server.py` (Python 3.10+) ou `node server.mjs` (Node.js 20+). Para encerrar, finalize somente o processo Node da central; reiniciar o computador também o encerra. Nada é instalado na inicialização do Windows. Mantenha a pasta no lugar.
 
 ## Instalação pelo repositório público
 Baixe o ZIP do repositório público, extraia e abra `uefy-live/Iniciar.vbs`. A marca é lida do arquivo `uefyerryeni-logo.png` existente na raiz do repositório. O tom de teste é gerado localmente na primeira inicialização. No repositório privado, use o pacote entregue ou coloque a marca original em `public/logo.png`.
@@ -44,3 +44,4 @@ Acesso autenticado à conta, aceitação do sinal pelo Instagram, latência da r
 - Identificação do player incorporado: https://developers.google.com/youtube/terms/required-minimum-functionality#embedded-player-api-client-identity
 
 Revisão: 27/10/2026. Sem serviços pagos novos.
+
