@@ -18,3 +18,10 @@ $('test').onclick=run(async()=>{await update({source:'test',playing:true,mode:'f
 $('copy').onclick=run(async()=>{await navigator.clipboard.writeText(location.origin+'/obs.html');feedback('Endereço da fonte copiado.');});
 setInterval(async()=>{try{const r=await fetch('/api/status');const j=await r.json();$('player-status').textContent=j.connected?j.status+' · '+j.time.toFixed(1)+'s':'Fonte do OBS desconectada ou sem resposta. Abra a fonte Navegador.';}catch{}},2000);
 new ResizeObserver(()=>{$('preview').style.transform='scale('+document.querySelector('.phone').clientWidth/1080+')';}).observe(document.querySelector('.phone'));
+
+function configurePreview(){
+ $('preview').contentWindow.postMessage({type:'uefy-preview-config',simulate:$('simulate-instagram').checked,guides:$('show-safe').checked},location.origin);
+}
+$('simulate-instagram').onchange=configurePreview;
+$('show-safe').onchange=configurePreview;
+$('preview').addEventListener('load',configurePreview);

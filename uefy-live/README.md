@@ -10,7 +10,7 @@ Central gratuita para Windows + OBS. Não requer API do X, banco de dados ou ass
 
 O painel pode ser adicionado em OBS → Painéis → Painéis de navegador personalizados. Assim toda a operação acontece dentro do OBS. Fechar o Brave não interrompe a fonte ou a central.
 
-Para iniciar por terminal: `python server.py` (Python 3.10+) ou `node server.mjs` (Node.js 20+). Para encerrar, finalize somente o processo Node da central; reiniciar o computador também o encerra. Nada é instalado na inicialização do Windows. Mantenha a pasta no lugar.
+Para iniciar por terminal: `python server.py` (Python 3.10+) ou `node server.mjs` (Node.js 20+). Para encerrar, finalize somente o processo Python ou Node da central; reiniciar o computador também o encerra. Nada é instalado na inicialização do Windows. Mantenha a pasta no lugar.
 
 ## Instalação pelo repositório público
 Baixe o ZIP do repositório público, extraia e abra `uefy-live/Iniciar.vbs`. A marca é lida do arquivo `uefyerryeni-logo.png` existente na raiz do repositório. O tom de teste é gerado localmente na primeira inicialização. No repositório privado, use o pacote entregue ou coloque a marca original em `public/logo.png`.
@@ -29,7 +29,7 @@ A incorporação usa a API oficial, origem real e política de Referer compatív
 
 Se a incorporação for proibida, peça à emissora um sinal/arquivo autorizado. Opções implementadas:
 - MP4/WebM HTTPS autorizado, reproduzido na mesma fonte e controlado pelo painel.
-- Fonte de mídia nativa no OBS, abaixo da composição. Selecione “Vídeo por fonte de mídia do OBS” no painel. A área transparente fica em **x=0, y=180, largura=1080, altura=608** na base 1080×1920. Configure o arquivo ou sinal autorizado nessa fonte. Controle seu áudio no mixer; a central não controla uma fonte de mídia externa.
+- Fonte de mídia nativa no OBS, abaixo da composição. Selecione “Vídeo por fonte de mídia do OBS” no painel. A área transparente fica em **x=90, y=444, largura=900, altura=506,25 (16:9)** na base 1080×1920. Configure o arquivo ou sinal autorizado nessa fonte. Controle seu áudio no mixer; a central não controla uma fonte de mídia externa.
 
 ## Instagram e teste sem público
 Use base 1080×1920, saída 720×1280, 30 FPS, H.264, CBR 4000 kbps, quadro-chave de 2 segundos e AAC estéreo 128–192 kbps. Confirme os limites mostrados pelo Live Producer da própria conta antes do evento. A configuração deve seguir a interface oficial caso os requisitos mudem.
@@ -44,4 +44,20 @@ Acesso autenticado à conta, aceitação do sinal pelo Instagram, latência da r
 - Identificação do player incorporado: https://developers.google.com/youtube/terms/required-minimum-functionality#embedded-player-api-client-identity
 
 Revisão: 27/10/2026. Sem serviços pagos novos.
+
+
+## Enquadramento seguro — atualização de 27/10/2026
+
+A composição continua em 1080×1920. A fonte e a conexão usam os mesmos endereços. A saída confirmada do OBS permanece 720×1280 a 30 FPS; áudio e controles de reprodução foram preservados.
+
+As informações essenciais estão dentro de x=90..990 e y=300..1516: margem lateral de 8,33%, reserva superior mínima de 15% e inferior de 20%. O vídeo mantém 16:9, com 900×506,25, sem recorte ou esticamento. A área do vídeo foi redimensionada individualmente; o texto não foi reduzido junto com a página. Comentários usam 56 px e são paginados por medição do espaço disponível, preservando o texto inteiro.
+
+No painel há “Simular interface do Instagram” e “Mostrar área segura”. Essas opções afetam apenas a prévia silenciosa. A fonte normal do OBS não recebe as marcações nem os controles simulados. Uma demonstração independente está em:
+http://127.0.0.1:17831/obs.html?preview=1&sim=1&guides=1&demo=1
+
+A simulação aproxima a interface e não representa todos os aparelhos. Confirme o resultado no Instagram em um celular antes do evento. A recompressão do Instagram e a resolução do vídeo original podem reduzir a nitidez; renderizar texto a 1080p não recupera detalhe ausente na fonte.
+
+OBS: fonte 1080×1920, posição 0,0, escala proporcional, recortes 0. Faça apenas uma redução para 720×1280 na saída. Não use “Esticar à tela”. Não é necessário alterar URL, chave, áudio ou bitrate atual de 6000 kbps. Para reaplicar o layout em uma fonte já carregada, atualize-a fora da transmissão. Em Modo Estúdio, a cena UEFY precisa estar em Programa.
+
+Se estiver usando uma Fonte de mídia externa abaixo da composição, ajuste somente essa fonte para x=90, y=444, largura=900, altura=506,25, mantendo 16:9. O YouTube integrado é ajustado automaticamente.
 
