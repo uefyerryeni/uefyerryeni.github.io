@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UEFY LIVE — Fonte OBS vertical</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--y:#f4dd19;--ink:#111;--paper:#fffdf0;--rule:rgba(0,0,0,.17)}
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--paper);font:600 25px/1.11 'Archivo Narrow',Arial,sans-serif;color:var(--ink)}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:4px solid #ad8700;outline-offset:3px}
+#canvas{width:100%;height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:var(--paper)}
+.masthead{flex:0 0 8.5%;min-height:0;background:#111;color:#fff;padding:2.1% 4%;display:flex;justify-content:space-between;align-items:center;gap:2%;border-bottom:7px solid var(--y)}
+.identity{display:flex;align-items:center;gap:15px;min-width:0}
+.identity img{width:65px;height:65px;border-radius:50%;border:4px solid var(--y);background:var(--y);object-fit:cover;flex:none}
+.avatar-fallback{display:none;place-items:center;width:65px;height:65px;border-radius:50%;border:4px solid var(--y);background:var(--y);color:#111;font-size:45px;font-weight:900;flex:none}.logo-text{font-weight:900;font-size:clamp(23px,4.6vw,67px);line-height:.83;white-space:nowrap;letter-spacing:-.05em}
+.logo-text strong{color:var(--y)}
+.logo-text small{display:block;font-size:clamp(10px,1.6vw,22px);color:var(--y);letter-spacing:.08em;margin-top:8px;white-space:nowrap}
+.onair{padding:9px 14px;border-radius:999px;color:#111;background:var(--y);font-size:clamp(11px,1.7vw,24px);font-weight:900;white-space:nowrap;letter-spacing:.04em}
+.video-region{flex:0 0 32%;min-height:0;background:#111;position:relative;overflow:hidden;border-bottom:7px solid #111;display:flex;align-items:center;justify-content:center}
+.video-container{position:relative;width:100%;aspect-ratio:16/9;background:#171717;max-height:100%}
+.video-container iframe{position:absolute;width:100%;height:100%;inset:0;border:0;display:block}
+.video-fallback{height:100%;width:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;background:linear-gradient(125deg,#161616,#373737);text-align:center;color:#fff}
+.video-fallback .mini{font-size:clamp(12px,1.6vw,24px);font-weight:900;border:2px solid var(--y);padding:9px 17px;color:var(--y);letter-spacing:.08em}
+.video-fallback .huge{font-weight:900;font-size:clamp(45px,9vw,130px);letter-spacing:-.07em;line-height:.83;margin:10px 0;color:var(--y)}
+.video-fallback small{font-size:clamp(12px,1.8vw,26px);color:#ddd}
+.ticker{flex:0 0 11%;min-height:0;background:var(--y);border-bottom:6px solid #111;padding:2.4% 4%;display:flex;align-items:center;gap:3%}
+.ticker-accent{width:12px;height:75%;background:#111;flex:none}
+.ticker-copy{min-width:0}
+.ticker-top{font-size:clamp(12px,2vw,29px);font-weight:900;letter-spacing:.11em;text-transform:uppercase}
+.ticker h1{margin:7px 0 0;font-size:clamp(26px,5vw,72px);letter-spacing:-.06em;line-height:.85;font-weight:900;text-transform:uppercase}
+.ticker-right{margin-left:auto;font-size:clamp(11px,1.45vw,20px);font-weight:900;max-width:26%;line-height:1.04;text-align:right}
+.editorial{flex:1 1 0;min-height:0;padding:3.5% 4% 3%;display:flex;flex-direction:column;gap:2%;background:var(--paper)}
+.editorial-top{display:flex;justify-content:space-between;gap:15px;align-items:center;flex:0 0 auto}
+.kicker{font-size:clamp(12px,2.2vw,31px);font-weight:900;letter-spacing:.07em}
+.kicker span{display:inline-block;background:var(--y);padding:8px 12px;border:2px solid #111}
+.edition{font-size:clamp(11px,1.55vw,22px);font-weight:900;color:#444;text-transform:uppercase}
+.post{flex:1 1 0;min-height:0;background:#fff;border:3px solid #111;border-radius:26px;padding:4%;display:flex;flex-direction:column;overflow:hidden}
+.post-header{flex:0 0 auto;display:flex;align-items:center;gap:16px;padding-bottom:3%;border-bottom:2px solid #ddd}
+.post-avatar{flex:none;border-radius:50%;background:var(--y);border:3px solid #111;width:75px;height:75px;object-fit:cover}
+.post-byline{min-width:0;flex:1}
+.post-author{display:block;font-size:clamp(25px,4vw,56px);font-weight:900;letter-spacing:-.04em;line-height:.95}
+.post-handle{display:block;color:#555;font-size:clamp(15px,2.4vw,35px);margin-top:5px}
+.xmark{font-size:clamp(30px,5.8vw,78px);line-height:1;font-family:Arial,sans-serif;font-weight:bold}
+.post-text{flex:1 1 0;min-height:0;overflow:hidden;padding-top:3.5%;font-size:clamp(24px,4vw,60px);font-weight:700;line-height:1.1;white-space:pre-wrap;overflow-wrap:anywhere;letter-spacing:-.017em}
+.post-text.medium{font-size:clamp(20px,3.25vw,49px)}
+.post-text.long{font-size:clamp(17px,2.7vw,41px)}
+.post-text.longest{font-size:clamp(15px,2.15vw,32px)}
+.post-footer{flex:0 0 auto;margin-top:auto;padding-top:2.5%;border-top:2px solid #ddd;color:#4c4c4c;font-size:clamp(12px,1.8vw,27px);font-weight:800;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.notice-card{flex:1 1 0;min-height:0;background:#111;color:#fff;border-radius:26px;border:3px solid #111;padding:5%;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.notice-card .notice-kicker{color:var(--y);font-weight:900;font-size:clamp(16px,2.2vw,31px);letter-spacing:.09em;text-transform:uppercase;margin-bottom:4%}
+.notice-card .post-text{flex:0 1 auto;color:#fff}
+.signature{flex:0 0 5.3%;min-height:0;background:#111;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:2%;padding:0 4%;font-size:clamp(11px,1.55vw,23px);font-weight:900;letter-spacing:.055em}
+.signature strong{color:var(--y)}
+/* Controlador: invisível durante a transmissão, surge no OBS via Interagir */
+#settings-toggle{position:fixed;top:6px;right:6px;z-index:19;width:64px;height:64px;border:2px solid var(--y);background:#111;color:var(--y);border-radius:15px;opacity:0;pointer-events:auto;transition:opacity .1s;font-size:34px}
+#settings-toggle:hover,#settings-toggle:focus-visible,body.editing #settings-toggle{opacity:1}
+#editor{display:none;position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.8);padding:32px;overflow:auto}
+body.editing #editor{display:block}
+.editorbox{margin:auto;background:var(--paper);border:5px solid #111;border-radius:20px;max-width:920px;padding:28px;box-shadow:0 0 0 3px var(--y)}
+.editorbox h2{margin:0 0 15px;font-size:45px;line-height:.9;letter-spacing:-.04em}
+.editorbox label{display:block;font-size:21px;font-weight:900;margin:15px 0 5px}
+.editorbox input,.editorbox textarea,.editorbox select{width:100%;background:white;border:2px solid #111;border-radius:8px;padding:10px;font-size:22px}
+.editorbox textarea{min-height:125px;resize:vertical}
+.editorbox button{border:2px solid #111;border-radius:10px;padding:12px 17px;background:var(--y);color:#111;font-weight:900;font-size:21px}
+.editorbox .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 5px}
+.editorbox .dark{background:#111;color:var(--y)}
+.editorbox .gray{background:#fff}
+.editorbox p{font-size:18px;line-height:1.3;margin:8px 0}
+.editorbox #feedback{min-height:24px;font-weight:800;color:#444}
+@media(max-width:650px){.masthead{border-bottom-width:4px}.identity img,.avatar-fallback{height:38px;width:38px;border-width:2px;font-size:27px}.logo-text small{margin-top:3px}.onair{padding:6px 8px}.video-region{border-bottom-width:4px}.ticker{border-bottom-width:3px}.ticker-accent{width:6px}.post{border-width:2px;border-radius:14px}.post-avatar{height:37px;width:37px;border-width:2px}.post-header{gap:7px}.xmark{font-size:23px}.kicker span{padding:4px 7px}.post-text{padding-top:7px}.editorbox{padding:14px}.editorbox h2{font-size:30px}.editorbox label{font-size:16px}.editorbox textarea{font-size:17px;min-height:80px}.editorbox input,.editorbox select,.editorbox button{font-size:17px}#editor{padding:14px}}
+</style>
+</head>
+<body>
+<main id="canvas">
+<header class="masthead"><div class="identity"><img src="https://avatars.githubusercontent.com/u/334060748?v=4" alt="U" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span class="avatar-fallback">U</span><div class="logo-text">UEFY <strong>LIVE</strong><small>TRANSMISSÃO COMENTADA • UFRN</small></div></div><span class="onair">● AO VIVO</span></header>
+<section class="video-region" aria-label="Vídeo da transmissão"><div class="video-container" id="video"></div></section>
+<section class="ticker"><div class="ticker-accent"></div><div class="ticker-copy"><div class="ticker-top">Cobertura UEFY • 2026</div><h1>Debate da Reitoria UFRN</h1></div><div class="ticker-right">CONTEÚDO DE TERCEIROS<br>RETRANSMISSÃO SUJEITA A AUTORIZAÇÃO</div></section>
+<section class="editorial"><div class="editorial-top"><div class="kicker"><span id="kind">ACOMPANHAMENTO</span></div><div class="edition">UEFY / INSTAGRAM</div></div><div id="comment" class="notice-card"></div></section>
+<footer class="signature"><span>UEFY • <strong>@UEFYERRYENI</strong></span><span>INDEPENDÊNCIA EDITORIAL</span></footer>
+</main>
+<button id="settings-toggle" type="button" aria-label="Abrir editor" title="Abrir editor (F2)">⚙</button>
+<section id="editor" role="dialog" aria-modal="true" aria-label="Controle UEFY LIVE">
+<div class="editorbox">
+<h2>CONTROLE DA UEFY LIVE</h2>
+<p>Este editor roda dentro da fonte Navegador do OBS. Para acessar, clique com o botão direito na fonte → <strong>Interagir</strong> e pressione <strong>F2</strong>, ou clique no canto superior direito da imagem.</p>
+<label for="youtube">Link da transmissão do YouTube</label>
+<input id="youtube" type="url" placeholder="https://www.youtube.com/watch?v=…">
+<p>O player começa sem som. Para ouvi-lo, marque “Controlar áudio pelo OBS” nas propriedades da fonte e verifique a disponibilidade de áudio no player.</p>
+<label for="mode">Tipo de card</label><select id="mode"><option value="aguarde">Acompanhamento</option><option value="comentario">Publicação do X — @Uefyerryeni</option><option value="aviso">Aviso editorial</option><option value="enquete">Enquete nos Stories</option></select>
+<label for="embed">Código de incorporação do X (opcional)</label>
+<textarea id="embed" placeholder='Cole o código &lt;blockquote class="twitter-tweet"&gt;…'></textarea>
+<div class="btnrow"><button id="extract" class="gray" type="button">Extrair publicação do X</button><button id="demo" class="gray" type="button">Usar post de teste</button></div>
+<label for="message">Texto do comentário</label><textarea id="message" maxlength="1000"></textarea>
+<label for="reference">Data / referência</label><input id="reference" placeholder="Publicado no X">
+<p id="feedback" role="status"></p>
+<div class="btnrow"><button id="publish" type="button">Aplicar e voltar à live</button><button id="clear" class="gray" type="button">Modo acompanhamento</button><button id="close" class="dark" type="button">Fechar editor</button></div>
+</div></section>
+<script>
+(()=>{'use strict';
+const DEMO='Vamos falar de eleições? Agora, para reitoria da UFRN. Dia 5 tem debate com transmissão da TV Universitária, e eu vou me organizar para fazer uma checagem dos fatos ditos pelos candidatos. Não está certo, mas irei me preparar. Vou fazer tudo no Instagram @Uefyerryeni. Dia 10, a comunidade da UFRN vai às urnas para escolher o próximo reitor.';
+const DEFAULT={youtube:'',mode:'aguarde',message:'Acompanhe a transmissão. Os comentários publicados pela UEFY serão apresentados aqui.',reference:'UEFY • cobertura comentada'};
+const KEY='uefy-obs-source-v1';
+function getState(){try{return {...DEFAULT,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch{return {...DEFAULT}}}
+let state=getState(),currentVideoId=null;
+const $=id=>document.getElementById(id);
+const escapeHtml=v=>String(v||'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const html=(message)=>escapeHtml(message);
+function ytId(raw){try{let u=new URL(raw.trim());let h=u.hostname.toLowerCase().replace(/^(www\.|m\.)/,'');let path=u.pathname.split('/').filter(Boolean);let id='';if(h==='youtu.be')id=path[0]||'';else if(['youtube.com','youtube-nocookie.com'].includes(h)){if(path[0]==='watch')id=u.searchParams.get('v')||'';else if(['live','embed','shorts'].includes(path[0]))id=path[1]||'';}return /^[\w-]{11}$/.test(id)?id:''}catch{return ''}}
+function render(){
+const id=ytId(state.youtube);
+if(id!==currentVideoId){currentVideoId=id;$('video').innerHTML=id?`<iframe title="Sinal de vídeo do YouTube" src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&controls=1&rel=0" allow="autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen></iframe>`:`<div class="video-fallback"><span class="mini">SINAL DA TV UNIVERSITÁRIA</span><div class="huge">DEBATE<br>UFRN</div><small>Configure o vídeo com F2 → Interagir no OBS</small></div>`}
+const labels={aguarde:'ACOMPANHAMENTO',comentario:'PUBLICAÇÃO DA UEFY NO X',aviso:'AVISO EDITORIAL',enquete:'ENQUETE NOS STORIES'};$('kind').textContent=labels[state.mode]||labels.aguarde;
+let cls=state.message.length>570?'longest':state.message.length>370?'long':state.message.length>170?'medium':'';
+if(state.mode==='comentario'){
+$('comment').className='post';$('comment').innerHTML=`<header class="post-header"><img class="post-avatar" alt="U" src="https://avatars.githubusercontent.com/u/334060748?v=4" onerror="this.style.visibility='hidden'"><div class="post-byline"><span class="post-author">Uefy</span><span class="post-handle">@Uefyerryeni</span></div><span class="xmark">𝕏</span></header><div class="post-text ${cls}">${html(state.message)}</div><footer class="post-footer">${html(state.reference||'Publicado no X')} • UEFY</footer>`;
+}else{$('comment').className='notice-card';$('comment').innerHTML=`<div class="notice-kicker">${escapeHtml(labels[state.mode]||labels.aguarde)}</div><div class="post-text ${cls}">${html(state.message)}</div>`}
+}
+function setForm(){ $('youtube').value=state.youtube;$('mode').value=state.mode;$('message').value=state.message;$('reference').value=state.reference; }
+function toggle(on){document.body.classList.toggle('editing',on);if(on)setForm()}
+$('settings-toggle').addEventListener('click',()=>toggle(true));$('close').addEventListener('click',()=>toggle(false));
+window.addEventListener('keydown',e=>{if(e.key==='F2'){e.preventDefault();toggle(!document.body.classList.contains('editing'))}else if(e.key==='Escape')toggle(false)});
+function parseEmbed(raw){let doc=new DOMParser().parseFromString(raw,'text/html');let q=doc.querySelector('blockquote.twitter-tweet'),p=q?.querySelector('p');let a=q&&[...q.querySelectorAll('a')].find(el=>{try{let url=new URL(el.href);return ['x.com','twitter.com','www.x.com','www.twitter.com'].includes(url.hostname.toLowerCase())&&/^\/uefyerryeni\/status\/\d+/i.test(url.pathname)}catch{return false}});if(!p||!a){$('feedback').textContent='Não encontrei uma publicação válida de @Uefyerryeni no código.';return}let s=p.textContent.trim();if(s.length>1000){$('feedback').textContent='O comentário ultrapassa 1000 caracteres.';return}$('mode').value='comentario';$('message').value=s;$('reference').value=(a.textContent.trim()||'Publicado no X')+' • X';$('feedback').textContent='Publicação extraída. Clique em Aplicar e voltar à live.'}
+$('extract').addEventListener('click',()=>parseEmbed($('embed').value));
+$('demo').addEventListener('click',()=>{$('embed').value='<blockquote class="twitter-tweet"><p>'+DEMO+'</p>— Uefy (@Uefyerryeni) <a href="https://x.com/Uefyerryeni/status/2114844542675595661">October 26, 2026</a></blockquote>';parseEmbed($('embed').value)});
+$('publish').addEventListener('click',()=>{let raw=$('youtube').value.trim();if(raw&&!ytId(raw)){$('feedback').textContent='Link do YouTube inválido. Confira o endereço do vídeo.';return}state={youtube:raw,mode:$('mode').value,message:$('message').value.trim()||DEFAULT.message,reference:$('reference').value.trim()};try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}render();toggle(false)});
+$('clear').addEventListener('click',()=>{state={...state,mode:'aguarde',message:DEFAULT.message,reference:DEFAULT.reference};try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}render();toggle(false)});
+setForm();render();
+})();
+</script>
+</body></html>
