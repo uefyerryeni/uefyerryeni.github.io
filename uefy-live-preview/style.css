@@ -71,3 +71,32 @@
 .preview-link{display:inline-block;margin-top:6px;font-weight:700;color:#141414}
 
 .top-brand{position:absolute;left:90px;top:155px;font-size:82px;line-height:1;letter-spacing:-4px;font-weight:900;color:#141414;opacity:.15;white-space:nowrap}.reading-progress{position:absolute;bottom:0;left:0;height:4px;background:#f4dd19;transform-origin:left;width:100%}.section-label{letter-spacing:0;font-size:21px}#post{position:relative}#comment-info{font-weight:700;font-size:14px}.access-note{background:#f4dd19;padding:12px}.mobile-access{margin-top:16px}#access-qr{display:none;width:220px;height:220px;image-rendering:pixelated}.import-warning{font-size:14px;line-height:1.4}#posturl{background:#fff}#preview-pages{font-size:14px}.preview-controls .actions{margin:8px 0}.panel h1{margin:20px 0}.panel-head{flex-wrap:wrap}#feedback{z-index:5}
+
+/* Ajuste após teste real no celular: margem extra para o corte do Instagram. */
+#canvas::before{height:184px}
+.top-brand{display:none}
+.masthead{left:152px;top:184px;width:776px;height:68px;padding:8px 16px;gap:14px}
+.masthead img{width:44px;height:44px}
+.wordmark{font-size:40px}
+.masthead>span{font-size:18px;padding:8px}
+#video-region{left:152px;top:270px;width:776px;height:436.5px}
+.headline{left:152px;top:722px;width:776px;height:62px;padding:10px 16px}
+.headline h1{font-size:40px;line-height:1.05;letter-spacing:-1.3px}
+.editorial{left:152px;top:804px;width:776px;height:732px}
+#post{height:696px;padding:16px;grid-template-rows:58px minmax(0,1fr)36px;gap:10px}
+#comment-text{font-size:44px;line-height:1.22;letter-spacing:-.6px}
+#post header img{width:48px;height:48px}
+#post header strong{font-size:32px}
+#post header small{font-size:28px}
+#post footer,#post-link{font-size:32px}
+.section-label{font-size:20px}
+#notice{height:696px}
+#notice h2{font-size:56px}
+#notice p{font-size:36px}
+.signature{left:152px;width:776px}
+.preview.show-guides #safe-guide{left:152px;right:152px;top:184px;height:1352px}
+.preview .ig-top{height:200px}
+.preview .ig-sim-label{font-size:22px}
+.phone{aspect-ratio:9/19.5}
+.phone iframe{height:2340px}
+.import-warning.incomplete{background:#ffe8bb;padding:12px;border-left:4px solid #9c4d00;font-weight:700}
