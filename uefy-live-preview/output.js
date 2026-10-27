@@ -1,9 +1,10 @@
+import {presentationAt,slideDurationMs,DEFAULT_COMMENT_SECONDS} from './presentation.js';
 const openState=()=>{};const api=()=>Promise.resolve({});
 const params=new URLSearchParams(location.search);
 const demo=true;params.set('crop','1');if(!params.has('clean'))params.set('sim','1');
 const preview=params.has('preview')||demo;
 const $=id=>document.getElementById(id);
-let state=null,identity='',yt=null,ready=false,lastCommand=-1,status='Aguardando sinal',error='',parts=[],partIndex=0,commentKey='',rotateAt=0,pageStarted=0,pageDuration=7000;
+let state=null,identity='',yt=null,ready=false,lastCommand=-1,status='Aguardando sinal',error='',parts=[],slides=[],partIndex=0,commentKey='',rotateAt=0,pageStarted=0,pageDuration=7000,sessionAnchor=0,presentationPhase='',lastDisplayMessage='';
 function testToneUrl(){
  const rate=44100,frames=rate*5,buf=new ArrayBuffer(44+frames*4),view=new DataView(buf);
  const ascii=(offset,s)=>{for(let i=0;i<s.length;i++)view.setUint8(offset+i,s.charCodeAt(i));};
@@ -53,17 +54,55 @@ function makePages(text){
  }
  return result.length?result:[''];
 }
+function makeSlides(){
+ const photos=state.comment?.media||[],textParts=state.comment?.text?.trim()?parts:[],out=[];
+ for(let i=0;i<Math.max(textParts.length,photos.length);i++){
+  if(textParts[i])out.push({type:'text',text:textParts[i]});
+  if(photos[i])out.push({type:'photo',photo:photos[i],number:i+1,total:photos.length});
+ }
+ return out;
+}
 function page(){
  if(!state||state.mode!=='comment')return;
- $('comment-text').textContent=parts[partIndex]||'';
- $('pagination').textContent=parts.length>1?(partIndex+1)+' / '+parts.length:'';
- pageDuration=Math.max(9000,Array.from(parts[partIndex]||'').length/11*1000);pageStarted=Date.now();rotateAt=pageStarted+pageDuration;
+ const slide=slides[partIndex];if(!slide)return;
+ const photo=slide.type==='photo';$('comment-text').hidden=photo;$('post-media').hidden=!photo;
+ if(photo){
+  $('photo-error').hidden=true;$('post-image').style.visibility='visible';
+  $('post-image').alt=slide.photo.alt;$('post-image').src=slide.photo.url;
+  $('photo-position').textContent='Foto '+slide.number+' / '+slide.total;
+ }else $('comment-text').textContent=slide.text;
+ $('pagination').textContent=slides.length>1?(partIndex+1)+' / '+slides.length:'';
+ pageDuration=slideDurationMs(slide);
+ pageStarted=Date.now();rotateAt=pageStarted+pageDuration;
 }
-function render(next){const previous=state;state=next;document.body.classList.toggle('overlay',state.source==='external');$('badge').textContent=state.mode==='wait'?'EM ESPERA':state.source==='test'?'TESTE TÉCNICO':'AO VIVO';$('kind').textContent=state.mode==='comment'?'COMENTÁRIO DA UEFY / X':'ACOMPANHAMENTO';$('post').style.display=state.mode==='comment'?'grid':'none';$('notice').style.display=state.mode==='comment'?'none':'block';const key=JSON.stringify(state.comment);if(key!==commentKey||previous?.mode!==state.mode){commentKey=key;parts=makePages(state.comment?.text||'');partIndex=0;page();}if(state.comment){$('post-reference').textContent=state.comment.reference.length>20?'Publicado no X':state.comment.reference;$('post-reference').title=state.comment.reference;$('post-link').textContent='Ver no X ↗';$('post-link').title=state.comment.url;}if(state.mode!=='comment')$('pagination').textContent='';loadPlayer();if(previous?.playing!==state.playing||lastCommand!==state.command){lastCommand=state.command;playing(true);}sound();renderCover();}
+function renderAuthor(comment){
+ let handle='Uefyerryeni';try{handle=new URL(comment?.url).pathname.split('/')[1]||handle;}catch{}
+ const own=handle.toLowerCase()==='uefyerryeni',name=comment?.author?.handle?.toLowerCase()===handle.toLowerCase()?comment.author.name:(own?'Uefy':handle);
+ $('post-author-name').textContent=name;$('post-author-name').title=name;$('post-author-handle').textContent='@'+handle;
+ $('post-avatar').style.display=own?'block':'none';$('post-initial').style.display=own?'none':'grid';$('post-initial').textContent=Array.from(name||handle)[0].toUpperCase();
+ $('kind').textContent=own?'PUBLICAÇÃO DA UEFY / X':'PUBLICAÇÃO NO X';
+}
+
+function tickPresentation(){
+ if(!state)return;
+ const view=presentationAt(state.mode,slides,state.commentStartedAt||sessionAnchor,state.commentDurationSeconds||DEFAULT_COMMENT_SECONDS,Date.now()),onair=view.phase==='comment';
+ $('post').style.display=onair?'grid':'none';$('participation-card').style.display=view.phase==='participation'?'flex':'none';$('notice').style.display=view.phase==='wait'?'block':'none';
+ if(onair){
+  if(presentationPhase!==view.phase||partIndex!==view.index){partIndex=view.index;page();renderAuthor(state.comment);}
+  pageStarted=view.slideStart;pageDuration=view.slideDuration;
+ }else{$('kind').textContent=view.phase==='participation'?'PARTICIPE PELO X':'ACOMPANHAMENTO';$('pagination').textContent='';}
+ presentationPhase=view.phase;
+ if(preview&&parent!==window){
+  const message={type:'uefy-display-status',phase:view.phase,remainingSeconds:view.remainingSeconds,expiresAt:view.expiresAt||0,revision:state.revision};
+  const signature=JSON.stringify(message);if(signature!==lastDisplayMessage){lastDisplayMessage=signature;parent.postMessage(message,location.origin);}
+ }
+}
+
+function render(next){const previous=state;state=next;document.body.classList.toggle('overlay',state.source==='external');$('badge').textContent=state.mode==='wait'?'EM ESPERA':state.source==='test'?'TESTE TÉCNICO':'AO VIVO';$('kind').textContent=state.mode==='comment'?'COMENTÁRIO DA UEFY / X':'ACOMPANHAMENTO';$('post').style.display=state.mode==='comment'?'grid':'none';$('notice').style.display=state.mode==='comment'?'none':'block';const key=JSON.stringify([state.comment,state.commentStartedAt||0]);if(key!==commentKey||previous?.mode!==state.mode){commentKey=key;sessionAnchor=Date.now();$('comment-text').hidden=false;$('post-media').hidden=true;parts=makePages(state.comment?.text||'');slides=makeSlides();for(const photo of state.comment?.media||[]){const preloaded=new Image();preloaded.src=photo.url;}partIndex=0;page();}if(state.comment){renderAuthor(state.comment);$('post-reference').textContent=state.comment.reference.length>20?'Publicado no X':state.comment.reference;$('post-reference').title=state.comment.reference;$('post-link').textContent='Ver no X ↗';$('post-link').title=state.comment.url;}if(state.mode!=='comment')$('pagination').textContent='';loadPlayer();if(previous?.playing!==state.playing||lastCommand!==state.command){lastCommand=state.command;playing(true);}sound();renderCover();tickPresentation();}
 media.addEventListener('playing',()=>{status='Mídia autorizada reproduzindo';});media.addEventListener('error',()=>{error='Formato ou endereço de mídia indisponível';status=error;renderCover();});
 if(!demo)openState(render,()=>{status='Conexão com o painel interrompida; mantendo o último conteúdo';});
 if(!preview){window.onYouTubeIframeAPIReady=()=>{identity='';loadPlayer();};const s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';document.head.append(s);}
-setInterval(()=>{if(parts.length>1&&Date.now()>rotateAt&&state?.mode==='comment'){partIndex=(partIndex+1)%parts.length;page();}},250);
+setInterval(tickPresentation,250);
 setInterval(telemetry,1000);
 function animate(){if($('reading-progress'))$('reading-progress').style.transform='scaleX('+Math.max(0,1-(Date.now()-pageStarted)/pageDuration)+')';if(state?.source==='test'){$('test-counter').textContent=String(Math.floor(testAudio.currentTime)%5+1);$('test-counter').style.background=testAudio.currentTime%1<.13?'#fffdf0':'#141414';}requestAnimationFrame(animate);}requestAnimationFrame(animate);
 
@@ -78,5 +117,7 @@ addEventListener('message',event=>{
 });
 if(demo){
  $('preview-video').innerHTML='<div class="demo-frame"><svg viewBox="0 0 900 506.25" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M50 0H0V50" fill="none" stroke="#141414" stroke-opacity=".10"/></pattern></defs><rect width="900" height="506.25" fill="url(#grid)"/><rect x="2" y="2" width="896" height="502.25" fill="none" stroke="#141414" stroke-width="4"/><circle cx="450" cy="253.125" r="155" fill="#f4dd19" stroke="#141414" stroke-width="4"/><path d="M0 253.125H900M450 0V506.25" stroke="#141414" stroke-opacity=".2"/></svg><strong>VÍDEO 16:9</strong><small>Amostra de enquadramento</small></div>';
- render({revision:0,source:'youtube',videoId:'M7lc1UVf-VE',mediaUrl:'',mode:'comment',volume:0,muted:true,playing:false,command:0,comment:{text:'A universidade precisa de propostas que possam ser acompanhadas pela comunidade. No debate da Reitoria da UFRN, vamos observar os compromissos com a permanência estudantil, a pesquisa e as condições de trabalho. Publicações longas continuam nas próximas páginas, com tempo para ler e sem diminuir demais as letras.',reference:'Prévia de demonstração',url:'https://x.com/Uefyerryeni/status/1'}});
+ render({revision:0,source:'youtube',videoId:'M7lc1UVf-VE',mediaUrl:'',mode:params.has('invite')?'follow':'comment',volume:0,muted:true,playing:false,command:0,comment:{text:'A universidade precisa de propostas que possam ser acompanhadas pela comunidade. No debate da Reitoria da UFRN, vamos observar os compromissos com a permanência estudantil, a pesquisa e as condições de trabalho. Publicações longas continuam nas próximas páginas, com tempo para ler e sem diminuir demais as letras.',reference:'Prévia de demonstração',url:'https://x.com/Uefyerryeni/status/1'}});
 }
+
+$('post-image').onerror=()=>{$('post-image').style.visibility='hidden';$('photo-error').hidden=false;};$('post-image').onload=()=>{$('post-image').style.visibility='visible';$('photo-error').hidden=true;};
