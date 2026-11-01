@@ -1,1 +1,83 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UEFY LIVE · Prévia corrigida</title><style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#141414}#device{position:absolute;width:1080px;height:2340px;transform-origin:0 0}iframe{width:1080px;height:2340px;border:0;display:block}</style></head><body><div id="device"><iframe src="about:blank" title="Simulação da transmissão no Instagram"></iframe></div><script>document.querySelector("iframe").src="./frame.html?sim=1&crop=1&v=video-invite"+(new URLSearchParams(location.search).has("invite")?"&invite=1":"");function resize(){const s=Math.min(innerWidth/1080,innerHeight/2340);document.getElementById('device').style.transform='translate('+((innerWidth-1080*s)/2)+'px,'+((innerHeight-2340*s)/2)+'px) scale('+s+')';}addEventListener('resize',resize);resize();</script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>UEFY LIVE · Prévia do debate da Reitoria</title>
+<style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#f5f2e9;background:#171717}
+*{box-sizing:border-box}body{margin:0}
+main{max-width:1050px;margin:auto;padding:26px clamp(16px,4vw,40px) 42px}
+header{border-bottom:2px solid #f4dd19;padding-bottom:15px;margin-bottom:18px}
+.brand{font-size:13px;font-weight:800;letter-spacing:.18em;color:#f4dd19}
+h1{font-size:clamp(27px,4vw,40px);line-height:1.08;margin:10px 0 8px}
+p{margin:0;color:#ddd7c7;line-height:1.5}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(270px,390px);align-items:start;gap:clamp(20px,5vw,55px)}
+h2{font-size:17px;margin:0 0 13px}
+.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}
+button{border:2px solid #a9a69b;background:#242424;color:#f5f2e9;font:700 15px/1.3 Arial,sans-serif;padding:13px 10px;text-align:left;cursor:pointer;min-height:63px}
+button[aria-pressed="true"]{background:#f4dd19;border-color:#f4dd19;color:#171717}
+button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.preview-settings{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px}
+.preview-settings button{min-height:42px;font-size:13px;text-align:center;flex:1}
+.info{font-size:13px;color:#bdb8ab}
+a{color:#f4dd19}
+.device{width:100%;aspect-ratio:1080/2340;overflow:hidden;background:#f4dd19;border:3px solid #f4dd19;box-shadow:0 0 0 1px #000}
+iframe{display:block;width:100%;height:100%;border:0}
+.foot{font-size:12px;color:#c5c0b2;margin-top:12px}
+@media(max-width:700px){main{padding-top:19px}.layout{grid-template-columns:1fr}.device{max-width:420px;margin:auto}.foot{max-width:420px;margin:12px auto 0}}
+</style>
+</head>
+<body>
+<main>
+<header><div class="brand">UEFYERRYENI / TRANSMISSÃO INDEPENDENTE</div><h1>Prévia da live do debate da Reitoria</h1><p>Simule os quatro blocos sem alterar a transmissão real.</p></header>
+<div class="layout">
+<section aria-label="Controles da prévia">
+<h2>Bloco em demonstração</h2>
+<div class="controls" id="blocks">
+<button type="button" data-block="1" aria-pressed="true">01 · Apresentações</button>
+<button type="button" data-block="2" aria-pressed="false">02 · Entidades</button>
+<button type="button" data-block="3" aria-pressed="false">03 · Candidatos</button>
+<button type="button" data-block="4" aria-pressed="false">04 · Encerramento</button>
+</div>
+<h2>Parte inferior da tela</h2>
+<div class="preview-settings" id="modes">
+<button type="button" data-mode="post" aria-pressed="true">Publicação de exemplo</button>
+<button type="button" data-mode="invite" aria-pressed="false">Convite à participação</button>
+</div>
+<p class="info">O quadro simula o corte lateral e os elementos do Instagram. O vídeo é ilustrativo e silencioso. Nenhum comando daqui altera o OBS, as publicações ou o painel privado.</p>
+</section>
+<section aria-label="Visualização vertical">
+<div class="device"><iframe id="preview" title="Simulação vertical UEFY LIVE" loading="eager" referrerpolicy="no-referrer"></iframe></div>
+<p class="foot">Visualização ilustrativa: confira o corte final no aplicativo do Instagram, que pode variar conforme o aparelho.</p>
+</section>
+</div>
+</main>
+<script>
+(() => {
+const base="https://checagem-debate-ufrn.vercel.app/obs.html?preview=1&sim=1&crop=1&demo=1";
+const allowed=new Set(["1","2","3","4"]);
+const params=new URLSearchParams(location.search);
+let block=allowed.has(params.get("block"))?params.get("block"):"1";
+let mode=params.has("invite")?"invite":"post";
+const preview=document.getElementById("preview");
+function render(){
+  const url=base+"&block="+block+(mode==="invite"?"&invite=1":"");
+  if(preview.src!==url)preview.src=url;
+  document.querySelectorAll("[data-block]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.block===block)));
+  document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===mode)));
+}
+document.getElementById("blocks").addEventListener("click",event=>{
+  const b=event.target.closest("button[data-block]");if(!b||!allowed.has(b.dataset.block))return;
+  block=b.dataset.block;render();
+});
+document.getElementById("modes").addEventListener("click",event=>{
+  const b=event.target.closest("button[data-mode]");if(!b)return;
+  mode=b.dataset.mode;render();
+});
+render();
+})();
+</script>
+</body>
+</html>
