@@ -56,7 +56,7 @@ iframe{display:block;width:100%;height:100%;border:0}
 </main>
 <script>
 (() => {
-const base="https://checagem-debate-ufrn.vercel.app/obs.html?preview=1&sim=1&crop=1&demo=1";
+const base="./frame.html?sim=1&crop=1";
 const allowed=new Set(["1","2","3","4"]);
 const params=new URLSearchParams(location.search);
 let block=allowed.has(params.get("block"))?params.get("block"):"1";
