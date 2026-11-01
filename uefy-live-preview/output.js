@@ -136,7 +136,30 @@ previewOptions({simulate:params.has('sim'),guides:params.has('guides')});
 addEventListener('message',event=>{
  if(preview&&event.origin===location.origin&&event.source===parent&&event.data?.type==='uefy-preview-config')previewOptions(event.data);
 });
-if(demo){
+const demoBlocks=[
+ {title:'APRESENTAÇÃO DAS CHAPAS',description:'Após a leitura do currículo, cada candidato à Reitoria apresenta seu projeto em até 3 minutos. Em seguida, é exibido o vídeo do candidato a vice-reitor, também de até 3 minutos.'},
+ {title:'PERGUNTAS DAS ENTIDADES',description:'Seis perguntas de ADURN-Sindicato, SINTEST/RN, ATENS, DCE e APG. As três chapas respondem a cada pergunta, com até 2 minutos por resposta.'},
+ {title:'PERGUNTAS ENTRE CANDIDATOS',description:'São seis perguntas entre os candidatos, duas formuladas por cada chapa. Cada pergunta dura até 1 minuto; cada resposta, até 3 minutos. Não há réplica ou tréplica ordinárias.'},
+ {title:'CONSIDERAÇÕES FINAIS',description:'Cada candidato apresenta suas considerações finais em até 3 minutos. A ordem de participação é definida por sorteio.'}
+];
+function renderDemoBlock(){
+  const value=Number(params.get('block')),id=Number.isInteger(value)&&value>=1&&value<=4?value:1,block=demoBlocks[id-1];
+  $('block-number').textContent=id+'º BLOCO';
+  $('block-title').textContent=block.title;
+  const el=$('block-description'),characters=Array.from(block.description);let rest=characters,pages=[];
+  while(rest.length){
+    let lo=1,hi=rest.length,fit=1;
+    while(lo<=hi){const mid=Math.floor((lo+hi)/2);el.textContent=rest.slice(0,mid).join('');if(el.scrollHeight<=el.clientHeight+1){fit=mid;lo=mid+1;}else hi=mid-1;}
+    const space=rest.slice(0,fit).lastIndexOf(' ');
+    const cut=fit<rest.length&&space>fit*.55?space:fit;
+    pages.push(rest.slice(0,cut).join('').trim());
+    rest=Array.from(rest.slice(cut).join('').trimStart());
+  }
+  let page=0;
+  function draw(){el.textContent=pages[page]||'';$('block-page').textContent=pages.length>1?((page+1)+' / '+pages.length):'';}
+  draw();if(pages.length>1)setInterval(()=>{page=(page+1)%pages.length;draw();},8000);
+}
+if(demo){renderDemoBlock();
  $('preview-video').innerHTML='<div class="demo-frame"><svg viewBox="0 0 900 506.25" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M50 0H0V50" fill="none" stroke="#141414" stroke-opacity=".10"/></pattern></defs><rect width="900" height="506.25" fill="url(#grid)"/><rect x="2" y="2" width="896" height="502.25" fill="none" stroke="#141414" stroke-width="4"/><circle cx="450" cy="253.125" r="155" fill="#f4dd19" stroke="#141414" stroke-width="4"/><path d="M0 253.125H900M450 0V506.25" stroke="#141414" stroke-opacity=".2"/></svg><strong>VÍDEO 16:9</strong><small>Amostra de enquadramento</small></div>';
  render({revision:0,source:'youtube',videoId:'M7lc1UVf-VE',mediaUrl:'',mode:params.has('invite')?'follow':'comment',volume:0,muted:true,playing:false,command:0,comment:{text:'A universidade precisa de propostas que possam ser acompanhadas pela comunidade. No debate da Reitoria da UFRN, vamos observar os compromissos com a permanência estudantil, a pesquisa e as condições de trabalho. Publicações longas continuam nas próximas páginas, com tempo para ler e sem diminuir demais as letras.',reference:'Prévia de demonstração',url:'https://x.com/Uefyerryeni/status/1'}});
 }
